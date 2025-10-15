@@ -1,0 +1,27 @@
+[
+  {
+    "Id": 1,
+    "Title": "The Dark Side of the Moon",
+    "Description": "A concept album by Pink Floyd.",
+    "ReleaseDate": "1973-03-01T00:00:00",
+    "ArtistsId": 0,
+    "GenreId": 0
+  },
+  {
+    "Id": 2,
+    "Title": "Blonde on Blonde",
+    "Description": "A 1966 double album by Bob Dylan.",
+    "ReleaseDate": "1966-05-16T00:00:00",
+    "ArtistsId": 1,
+    "GenreId": 1
+  },
+  {
+    "Id": 3,
+    "Title": "In the Court of the Crimson King",
+    "Description": "A progressive rock album by King Crimson.",
+    "ReleaseDate": "1969-10-10T00:00:00",
+    "ArtistsId": 2,
+    "GenreId": null
+  }
+]
+
