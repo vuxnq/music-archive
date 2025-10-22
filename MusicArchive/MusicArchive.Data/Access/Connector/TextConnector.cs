@@ -18,4 +18,6 @@ public class TextConnector : IDataConnector
     public IGenreDao CreateGenreDao() {
         return new GenreTextDao(textFilesPath + "genre.json");
     }
+    
+    public void Dispose() {}
 }

@@ -4,19 +4,16 @@ using MusicArchive.Data.Models;
 namespace MusicArchive.Data;
 
 public class ArtistSqlDao : IArtistDao {
-    private string connectionString;
+    private SqliteConnection connection;
 
-    public ArtistSqlDao(string connectionString) {
-        this.connectionString = connectionString;
+    public ArtistSqlDao(SqliteConnection connection) {
+        this.connection = connection;
     }
     
     public  List<Artist> GetArtists() {
         var result = new List<Artist>();
 
-        using var conn = new SqliteConnection(connectionString);
-        conn.Open();
-        
-        var cmd = conn.CreateCommand();
+        var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, name, beginDate, endDate, location FROM artist";
         
         using var reader = cmd.ExecuteReader();
@@ -27,10 +24,7 @@ public class ArtistSqlDao : IArtistDao {
     }
 
     public Artist GetArtist(int id) {
-        using var conn = new SqliteConnection(connectionString);
-        conn.Open();
-
-        var cmd = conn.CreateCommand();
+        var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, name, beginDate, endDate, location FROM artist WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
         

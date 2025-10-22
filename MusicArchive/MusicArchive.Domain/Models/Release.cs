@@ -1,11 +1,18 @@
-﻿namespace MusicArchive.Domain.Models;
+﻿using Microsoft.Data.Sqlite;
 
-public class Release
-{
-    public int ID { get; set; }
+namespace MusicArchive.Domain.Models;
+
+public class Release {
+    public int Id { get; set; }
     public string Title { get; set; }
     public string? Description { get; set; }
     public DateTime ReleaseDate { get; set; }
-    List<Artist>? Artists { get; set; }
-    List<Genre> Genres { get; set; }
+    public int ArtistsId { get; set; }
+    public int? GenreId { get; set; }
+
+    public Release() {}
+
+    public override string ToString() {
+        return $"(domain) id: {Id}, title: {Title}, description: {Description}, releaseDate: {ReleaseDate}, artistsId: {ArtistsId}, genreId: {GenreId}";
+    }
 }

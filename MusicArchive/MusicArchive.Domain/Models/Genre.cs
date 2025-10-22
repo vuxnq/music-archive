@@ -1,8 +1,14 @@
+using Microsoft.Data.Sqlite;
+
 namespace MusicArchive.Domain.Models;
 
-public class Genre
-{
-    public int GenreID { get; set; }
+public class Genre {
+    public int Id { get; set; }
     public string Name { get; set; }
-    public Genre? parentGenre { get; set; }
+
+    public Genre() {}
+    
+    public override string ToString() {
+        return $"(domain) id: {Id}, name: {Name}";
+    }
 }

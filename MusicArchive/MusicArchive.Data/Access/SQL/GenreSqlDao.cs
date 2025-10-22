@@ -4,19 +4,16 @@ using MusicArchive.Data.Models;
 namespace MusicArchive.Data;
 
 public class GenreSqlDao : IGenreDao {
-    private string connectionString;
+    private SqliteConnection connection;
 
-    public GenreSqlDao(string connectionString) {
-        this.connectionString = connectionString;
+    public GenreSqlDao(SqliteConnection connection) {
+        this.connection = connection;
     }
     
     public List<Genre> GetGenres() {
         var result = new List<Genre>();
         
-        using var conn = new SqliteConnection(connectionString);
-        conn.Open();
-
-        var cmd = conn.CreateCommand();
+        var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, name FROM genre";
         
         using var reader = cmd.ExecuteReader();
@@ -27,10 +24,7 @@ public class GenreSqlDao : IGenreDao {
     }
 
     public Genre GetGenre(int id) {
-        using var conn = new SqliteConnection(connectionString);
-        conn.Open();
-
-        var cmd = conn.CreateCommand();
+        var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, name FROM genre WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
         

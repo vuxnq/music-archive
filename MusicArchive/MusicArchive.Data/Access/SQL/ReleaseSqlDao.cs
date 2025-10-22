@@ -4,34 +4,27 @@ using MusicArchive.Data.Models;
 namespace MusicArchive.Data;
 
 public class ReleaseSqlDao : IReleaseDao {
-    private string connectionString;
+    private SqliteConnection connection;
 
-    public ReleaseSqlDao(string connectionString) {
-        this.connectionString = connectionString;
+    public ReleaseSqlDao(SqliteConnection connection) {
+        this.connection = connection;
     }
     
     public List<Release> GetReleases() {
         var result = new List<Release>();
 
-        using var conn = new SqliteConnection(connectionString);
-        conn.Open();
-        
-        var cmd = conn.CreateCommand();
+        var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, title, description, releaseDate, artistId, genreId FROM release";
         
         using var reader = cmd.ExecuteReader();
         while (reader.Read()) {
             result.Add(new Release(reader));
         }
-
         return result;
     }
 
     public Release GetRelease(int id) {
-        using var conn = new SqliteConnection(connectionString);
-        conn.Open();
-        
-        var cmd = conn.CreateCommand();
+        var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, title, description, releaseDate, artistId, genreId FROM release WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
         
