@@ -9,6 +9,6 @@ public class Genre {
     public Genre() {}
     
     public override string ToString() {
-        return $"(domain) id: {Id}, name: {Name}";
+        return $"id: {Id}, name: {Name}";
     }
 }

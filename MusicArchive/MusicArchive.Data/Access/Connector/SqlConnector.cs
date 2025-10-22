@@ -7,8 +7,8 @@ public class SqlConnector : IDataConnector {
     private SqliteConnection connection;
     private bool disposed = false;
 
-    public SqlConnector(string connectionString) {
-        this.connectionString = connectionString;
+    public SqlConnector() {
+        this.connectionString = GlobalConnector.GetConnectionString();
         SQLitePCL.Batteries.Init();
         connection = new SqliteConnection(connectionString);
         connection.Open();

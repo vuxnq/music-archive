@@ -1,0 +1,13 @@
+@model List<MusicArchive.Domain.Models.Artist>
+
+@{
+    ViewBag.Title = "Artists";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+@{
+    foreach (var artist in Model) {
+        @artist<br>
+    }
+}

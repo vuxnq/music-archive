@@ -12,16 +12,16 @@ public static class GlobalConnector {
     
     public static IDataConnector CreateConnection() {
         if (_dataSource == GlobalConnectorDataSource.Sqlite) {
-            return new SqlConnector(GetConnectionString());
+            return new SqlConnector();
         }
-        return new TextConnector(GetFilesPath());
+        return new TextConnector();
     }
 
     public static void SetDataSource(GlobalConnectorDataSource dataSource) {
         _dataSource = dataSource;
     }
 
-    private static string GetConnectionString() {
+    public static string GetConnectionString() {
         var solutionPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", ".."));
         var builder = new SqliteConnectionStringBuilder();
         builder.DataSource = Path.Combine(solutionPath, "musicarchive.db");
@@ -29,7 +29,7 @@ public static class GlobalConnector {
         return builder.ConnectionString;
     }
 
-    private static string GetFilesPath() {
+    public static string GetFilesPath() {
         var solutionPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", ".."));
         return Path.Combine(solutionPath, "MusicArchive.TextFiles/");
     }

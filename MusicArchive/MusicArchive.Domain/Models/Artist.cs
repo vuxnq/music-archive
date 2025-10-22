@@ -12,6 +12,6 @@ public class Artist {
     public Artist() {}
     
     public override string ToString() {
-        return $"(domain) id: {Id}, name: {Name}, beginDate: {BeginDate}, endDate: {EndDate}, location: {Location}";
+        return $"id: {Id}, name: {Name}, beginDate: {BeginDate}, endDate: {EndDate}, location: {Location}";
     }
 }

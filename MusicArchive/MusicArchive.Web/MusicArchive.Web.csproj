@@ -11,4 +11,8 @@
       <ProjectReference Include="..\MusicArchive.Domain\MusicArchive.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\" />
+    </ItemGroup>
+
 </Project>

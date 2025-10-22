@@ -13,6 +13,6 @@ public class Release {
     public Release() {}
 
     public override string ToString() {
-        return $"(domain) id: {Id}, title: {Title}, description: {Description}, releaseDate: {ReleaseDate}, artistsId: {ArtistsId}, genreId: {GenreId}";
+        return $"id: {Id}, title: {Title}, description: {Description}, releaseDate: {ReleaseDate}, artistsId: {ArtistsId}, genreId: {GenreId}";
     }
 }

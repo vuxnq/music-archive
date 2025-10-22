@@ -3,8 +3,8 @@ namespace MusicArchive.Data;
 public class TextConnector : IDataConnector
 {
     private string textFilesPath;
-    public TextConnector(string textFilesPath) {
-        this.textFilesPath = textFilesPath;
+    public TextConnector() {
+        this.textFilesPath = GlobalConnector.GetFilesPath();
     }
     
     public IReleaseDao CreateReleaseDao() {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using MusicArchive.Data;
-using MusicArchive.Domain;
+using MusicArchive.Domain.Mappers;
 
 namespace Test;
 

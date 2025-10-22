@@ -1,4 +1,5 @@
 using MusicArchive.Data;
+using MusicArchive.Domain.Services;
 
 namespace MusicArchive.Web;
 
@@ -7,9 +8,15 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddScoped<IDataConnector, SqlConnector>();
+
+        builder.Services.AddScoped<IArtistService, ArtistService>();
+        builder.Services.AddScoped<IGenreService, GenreService>();
+        builder.Services.AddScoped<IReleaseService, ReleaseService>();
         
         var app = builder.Build();
 
