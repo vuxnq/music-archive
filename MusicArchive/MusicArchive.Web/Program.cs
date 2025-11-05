@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using MusicArchive.Data;
 using MusicArchive.Domain.Services;
 
@@ -8,16 +9,17 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddScoped<IDataConnector, SqlConnector>();
+        // builder.Services.AddScoped<IDataConnector, TextConnector>();
 
         builder.Services.AddScoped<IArtistService, ArtistService>();
         builder.Services.AddScoped<IGenreService, GenreService>();
         builder.Services.AddScoped<IReleaseService, ReleaseService>();
-        
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -42,3 +44,6 @@ public class Program
         app.Run();
     }
 }
+
+
+// todo: pridani zaznamu - for now artist

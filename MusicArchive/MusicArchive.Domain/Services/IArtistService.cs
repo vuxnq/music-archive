@@ -4,4 +4,5 @@ namespace MusicArchive.Domain.Services;
 
 public interface IArtistService {
     public List<Artist> GetArtists();
+    public void AddArtist(Artist artist);
 }

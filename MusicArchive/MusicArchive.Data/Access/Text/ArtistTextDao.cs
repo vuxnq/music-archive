@@ -21,4 +21,13 @@ public class ArtistTextDao : IArtistDao {
         if (result == null) throw new KeyNotFoundException($"artist {id} not found");
         return result;
     }
+
+    public void AddArtist(Artist artist) {
+        var list = GetArtists();
+        var nextId = list.Any() ? list.Max(a => a.Id) + 1 : 0;
+        artist.Id = nextId;
+        list.Add(artist);
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
 }

@@ -10,11 +10,11 @@ public class Artist {
     public string? Location { get; set; }
 
     public Artist() {}
-    
+
     public Artist(SqliteDataReader reader) {
-        Id = reader.GetInt32(0);
-        Name = reader.GetString(1);
-        BeginDate = reader.GetDateTime(2);
+        Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
+        Name = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
+        BeginDate = reader.IsDBNull(2) ? DateTime.MinValue : reader.GetDateTime(2);
         EndDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3);
         Location = reader.IsDBNull(4) ? (string?)null : reader.GetString(4);
     }

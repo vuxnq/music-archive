@@ -11,3 +11,26 @@
         @artist<br>
     }
 }
+
+@using (Html.BeginForm("Index", "Artist", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="Name">Name</label>
+        <input type="text" id="Name" name="Name" required />
+    </div>
+    <div>
+        <label for="BeginDate">Begin date</label>
+        <input type="date" id="BeginDate" name="BeginDate" />
+    </div>
+    <div>
+        <label for="EndDate">End date</label>
+        <input type="date" id="EndDate" name="EndDate" />
+    </div>
+    <div>
+        <label for="Location">Location</label>
+        <input type="text" id="Location" name="Location" />
+    </div>
+    <div>
+        <button type="submit">Add Artist</button>
+    </div>
+}
