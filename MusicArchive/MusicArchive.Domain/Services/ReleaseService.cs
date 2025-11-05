@@ -8,4 +8,10 @@ public class ReleaseService(IDataConnector connector) : IReleaseService {
     public List<Release> GetReleases() {
         return connector.CreateReleaseDao().GetReleases().ToDomain();
     }
+
+    public void AddRelease(Release release) {
+        var data = release.ToData();
+        connector.CreateReleaseDao().AddRelease(data);
+        release.Id = data.Id;
+    }
 }

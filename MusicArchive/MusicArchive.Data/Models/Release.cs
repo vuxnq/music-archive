@@ -11,13 +11,13 @@ public class Release {
     public int? GenreId { get; set; }
 
     public Release() {}
-    
+
     public Release(SqliteDataReader reader) {
-        Id = reader.GetInt32(0);
-        Title = reader.GetString(1);
+        Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
+        Title = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
         Description = reader.IsDBNull(2) ? null : reader.GetString(2);
-        ReleaseDate = reader.GetDateTime(3);
-        ArtistsId = reader.GetInt32(4);
+        ReleaseDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3);
+        ArtistsId = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);
         GenreId = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5);
     }
 

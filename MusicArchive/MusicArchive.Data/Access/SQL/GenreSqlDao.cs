@@ -9,13 +9,13 @@ public class GenreSqlDao : IGenreDao {
     public GenreSqlDao(SqliteConnection connection) {
         this.connection = connection;
     }
-    
+
     public List<Genre> GetGenres() {
         var result = new List<Genre>();
-        
+
         var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, name FROM genre";
-        
+
         using var reader = cmd.ExecuteReader();
         while (reader.Read()) {
             result.Add(new Genre(reader));
@@ -27,11 +27,27 @@ public class GenreSqlDao : IGenreDao {
         var cmd = connection.CreateCommand();
         cmd.CommandText = "SELECT id, name FROM genre WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
-        
+
         using var reader = cmd.ExecuteReader();
         if (!reader.Read()) throw new KeyNotFoundException($"genre {id} not found");
-        
+
         return new Genre(reader);
         ;
+    }
+
+    public void AddGenre(Genre genre) {
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+            INSERT INTO genre (name)
+            VALUES ($name);
+            SELECT last_insert_rowid();
+        ";
+
+        cmd.Parameters.AddWithValue("$name", genre.Name);
+
+        var result = cmd.ExecuteScalar();
+        if (result != null && long.TryParse(result.ToString(), out var id)) {
+            genre.Id = (int)id;
+        }
     }
 }

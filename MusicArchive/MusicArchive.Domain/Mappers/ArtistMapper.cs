@@ -16,7 +16,7 @@ public static class ArtistMapper {
     public static List<Artist> ToDomain(this IEnumerable<MusicArchive.Data.Models.Artist> list) {
         return list.Select(x => x.ToDomain()).ToList();
     }
-    
+
     public static MusicArchive.Data.Models.Artist ToData(this Artist domain) {
         return new MusicArchive.Data.Models.Artist {
             Id = domain.Id,

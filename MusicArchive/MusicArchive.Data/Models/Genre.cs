@@ -7,10 +7,10 @@ public class Genre {
     public string Name { get; set; }
 
     public Genre() {}
-    
+
     public Genre(SqliteDataReader reader) {
-        Id = reader.GetInt32(0);
-        Name = reader.GetString(1);
+        Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
+        Name = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
     }
 
     public override string ToString() {

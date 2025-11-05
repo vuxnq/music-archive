@@ -5,4 +5,5 @@ namespace MusicArchive.Data;
 public interface IReleaseDao {
     List<Release> GetReleases();
     Release GetRelease(int id);
+    void AddRelease(Release release);
 }
