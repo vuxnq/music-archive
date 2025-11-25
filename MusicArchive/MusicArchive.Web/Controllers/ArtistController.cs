@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicArchive.Domain.Services;
+using MusicArchive.Domain.Models;
+using MusicArchive.Web.Models;
 
 namespace MusicArchive.Web.Controllers;
 
@@ -14,7 +16,7 @@ public class ArtistController(
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Index(MusicArchive.Domain.Models.Artist artist) {
+    public IActionResult Index(Artist artist) {
         if (!ModelState.IsValid) {
             var artists = artistService.GetArtists();
             return View(artists);
@@ -22,5 +24,11 @@ public class ArtistController(
 
         artistService.AddArtist(artist);
         return RedirectToAction("Index");
+    }
+
+    public IActionResult Detail(int id) {
+        var artist = artistService.GetArtist(id);
+
+        return View(artist);
     }
 }

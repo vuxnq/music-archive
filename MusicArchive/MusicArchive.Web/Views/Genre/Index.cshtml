@@ -6,11 +6,13 @@
 }
 
 <h2>@ViewBag.Title</h2>
-@{
-    foreach (var genre in Model) {
-        @genre<br>
-    }
+<ul>
+@foreach (var genre in Model) {
+    <li>
+        @Html.ActionLink(genre.Name, "Detail", "Genre", new { id = genre.Id }, null)
+    </li>
 }
+</ul>
 
 @using (Html.BeginForm("Index", "Genre", FormMethod.Post)) {
     @Html.AntiForgeryToken()

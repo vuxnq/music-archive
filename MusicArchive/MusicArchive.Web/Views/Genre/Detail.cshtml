@@ -1,0 +1,33 @@
+@model MusicArchive.Domain.Models.Genre
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h3>details</h3>
+    <p>Id: @Model.Id</p>
+    <p>Name: @Model.Name</p>
+</div>
+
+<div>
+    <h3>Releases</h3>
+    @if (Model.Releases.Any()) {
+        <ul>
+            @foreach (var r in Model.Releases) {
+                <li>
+                    @r.Title
+                    <div>@(r.ReleaseDate.ToString("d"))</div>
+                    @if (!string.IsNullOrEmpty(r.Description)) {
+                        <div>@r.Description</div>
+                    }
+                </li>
+            }
+        </ul>
+    } else {
+        <p>no releases</p>
+    }
+</div>

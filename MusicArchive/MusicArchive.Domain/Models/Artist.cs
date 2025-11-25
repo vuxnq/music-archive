@@ -8,6 +8,8 @@ public class Artist {
     public DateTime BeginDate { get; set; }
     public DateTime? EndDate { get; set; }
     public string? Location { get; set; }
+    
+    public List<Release> Releases { get; set; } = new List<Release>();
 
     public Artist() {}
     

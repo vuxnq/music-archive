@@ -5,14 +5,26 @@ using MusicArchive.Domain.Models;
 namespace MusicArchive.Domain.Services;
 
 public class ArtistService(IDataConnector connector) : IArtistService {
+    private readonly IArtistDao _artistDao = connector.CreateArtistDao();
+    private readonly IReleaseDao _releaseDao = connector.CreateReleaseDao();
+
     public List<Artist> GetArtists() {
-        return connector.CreateArtistDao().GetArtists().ToDomain();
+        return _artistDao.GetArtists().ToDomain();
+    }
+
+    public Artist GetArtist(int id) {
+        var artist = _artistDao.GetArtist(id).ToDomain();
+        
+        artist.Releases = _releaseDao.GetReleases().ToDomain()
+            .Where(r => r.ArtistsId == id)
+            .ToList();
+
+        return artist;
     }
 
     public void AddArtist(Artist artist) {
         var data = artist.ToData();
-        connector.CreateArtistDao().AddArtist(data);
-        
+        _artistDao.AddArtist(data);
         artist.Id = data.Id;
     }
 }

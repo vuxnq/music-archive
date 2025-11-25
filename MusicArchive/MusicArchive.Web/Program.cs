@@ -44,6 +44,3 @@ public class Program
         app.Run();
     }
 }
-
-
-// todo: pridani zaznamu - for now artist

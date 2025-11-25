@@ -5,13 +5,29 @@ using MusicArchive.Domain.Models;
 namespace MusicArchive.Domain.Services;
 
 public class ReleaseService(IDataConnector connector) : IReleaseService {
+    private readonly IReleaseDao _releaseDao = connector.CreateReleaseDao();
+    private readonly IArtistDao _artistDao = connector.CreateArtistDao();
+    private readonly IGenreDao _genreDao = connector.CreateGenreDao();
+
     public List<Release> GetReleases() {
-        return connector.CreateReleaseDao().GetReleases().ToDomain();
+        return _releaseDao.GetReleases().ToDomain();
+    }
+
+    public Release GetRelease(int id) {
+        var release = _releaseDao.GetRelease(id).ToDomain();
+        
+        release.Artist = _artistDao.GetArtist(release.ArtistsId).ToDomain();
+
+        if (release.GenreId.HasValue) {
+            release.Genre = _genreDao.GetGenre(release.GenreId.Value).ToDomain();
+        }
+        
+        return release;
     }
 
     public void AddRelease(Release release) {
         var data = release.ToData();
-        connector.CreateReleaseDao().AddRelease(data);
+        _releaseDao.AddRelease(data);
         release.Id = data.Id;
     }
 }
