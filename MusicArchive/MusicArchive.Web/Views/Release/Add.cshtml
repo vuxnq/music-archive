@@ -1,0 +1,88 @@
+@model MusicArchive.Web.Models.ReleaseAddDto
+
+@{
+    ViewBag.Title = "Add Release";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Add", "Release", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="Title">Title</label>
+        <input type="text" id="Title" name="Title" value="@Model?.Title" required />
+    </div>
+    <div>
+        <label for="Description">Description</label>
+        <input type="text" id="Description" name="Description" value="@Model?.Description" />
+    </div>
+    <div>
+        <label for="ReleaseDate">Release date</label>
+        <input type="date" id="ReleaseDate" name="ReleaseDate" value="@(Model?.ReleaseDate.ToString("yyyy-MM-dd") ?? string.Empty)" required />
+    </div>
+    <div>
+        <label for="ArtistsId">Artist Id</label>
+        <input type="number" id="ArtistsId" name="ArtistsId" value="@(Model?.ArtistsId.ToString() ?? string.Empty)" required />
+    </div>
+    <div>
+        <label for="GenreId">Genre Id</label>
+        <input type="number" id="GenreId" name="GenreId" value="@(Model?.GenreId.HasValue ?? false ? Model.GenreId.Value.ToString() : string.Empty)" />
+    </div>
+
+    <h3>Tracks</h3>
+    <table id="tracksTable">
+        <thead>
+            <tr><th>Title</th><th>Duration (s)</th><th></th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" name="Tracks[0].Title" required /></td>
+                <td><input type="number" name="Tracks[0].Duration" required /></td>
+                <td><button type="button" class="remove">Remove</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        <button type="button" id="addTrack">Add Track</button>
+    </p>
+    <div>
+        <button type="submit">Add Release</button>
+    </div>
+}
+
+<script>
+const addBtn = document.getElementById('addTrack');
+const tbody = document.querySelector('#tracksTable tbody');
+
+function reindexRows() {
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach((row, i) => {
+        const title = row.querySelector('input[name$=".Title"]');
+        const duration = row.querySelector('input[name$=".Duration"]');
+        if (title) title.name = `Tracks[${i}].Title`;
+        if (duration) duration.name = `Tracks[${i}].Duration`;
+    });
+}
+
+addBtn.addEventListener('click', () => {
+    const idx = tbody.querySelectorAll('tr').length;
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><input type="text" name="Tracks[' + idx + '].Title" required /></td>' +
+                    '<td><input type="number" name="Tracks[' + idx + '].Duration" required /></td>' +
+                    '<td><button type="button" class="remove">Remove</button></td>';
+    tbody.appendChild(tr);
+});
+
+tbody.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target && target.classList && target.classList.contains('remove')) {
+        const tr = target.closest('tr');
+        if (tr) tr.remove();
+        reindexRows();
+    }
+});
+
+// if the page was rendered with prefilled rows, ensure names are sequential
+reindexRows();
+</script>

@@ -16,4 +16,6 @@ public class ReleaseAddDto {
     public int ArtistsId { get; set; }
 
     public int? GenreId { get; set; }
+
+    public List<TrackAddDto> Tracks { get; set; } = new List<TrackAddDto>();
 }

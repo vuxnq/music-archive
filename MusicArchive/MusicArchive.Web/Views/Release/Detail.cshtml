@@ -1,0 +1,36 @@
+@model MusicArchive.Domain.Models.Release
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h3>details</h3>
+    <p>Id: @Model.Id</p>
+    <p>Name: @Model.Title</p>
+    <p>Description: @Model.Description</p>
+    <p>Release date: @(Model.ReleaseDate.ToString("d"))</p>
+    <p>Artist id: @Model.ArtistsId</p>
+    <p>Genre id: @Model.GenreId</p>
+</div>
+
+<h3>Artist</h3>
+<p>@Model.Artist.Name</p>
+<p>@Model.Artist.BeginDate</p>
+
+@if (Model.Genre != null) {
+    <h3>Genre</h3>
+    <p>@Model.Genre.Name</p>
+}
+
+<h3>Tracks</h3>
+<ul>
+    @foreach (var track in Model.Tracks) {
+        <li>
+            @Html.ActionLink(track.Title, "Detail", "Track", new { id = track.Id }, null)
+        </li>
+    }
+</ul>

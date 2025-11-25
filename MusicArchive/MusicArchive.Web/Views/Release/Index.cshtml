@@ -1,0 +1,18 @@
+@model List<MusicArchive.Domain.Models.Release>
+
+@{
+    ViewBag.Title = "Releases";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+<ul>
+    @foreach (var release in Model) {
+        <li>
+            @Html.ActionLink(release.Title, "Detail", "Release", new { id = release.Id }, null)
+        </li>
+    }
+</ul>
+<p>
+    @Html.ActionLink("Add new release", "Add", "Release")
+</p>
