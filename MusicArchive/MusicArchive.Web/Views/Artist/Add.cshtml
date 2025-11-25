@@ -1,0 +1,31 @@
+@model MusicArchive.Web.Models.ArtistAddDto
+
+@{
+    ViewBag.Title = "Add Artist";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Add", "Artist", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="Name">Name</label>
+        <input type="text" id="Name" name="Name" value="@Model?.Name" required />
+    </div>
+    <div>
+        <label for="BeginDate">Begin date</label>
+        <input type="date" id="BeginDate" name="BeginDate" value="@(Model?.BeginDate.ToString("yyyy-MM-dd") ?? string.Empty)" required />
+    </div>
+    <div>
+        <label for="EndDate">End date</label>
+        <input type="date" id="EndDate" name="EndDate" value="@((Model?.EndDate.HasValue ?? false) ? Model.EndDate.Value.ToString("yyyy-MM-dd") : string.Empty)" />
+    </div>
+    <div>
+        <label for="Location">Location</label>
+        <input type="text" id="Location" name="Location" value="@Model?.Location" />
+    </div>
+    <div>
+        <button type="submit">Add Artist</button>
+    </div>
+}

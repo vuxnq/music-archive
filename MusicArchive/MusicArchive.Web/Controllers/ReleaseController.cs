@@ -14,13 +14,24 @@ public class ReleaseController(
         return View(releases);
     }
 
+    public IActionResult Add() {
+        return View(new ReleaseAddDto { ReleaseDate = DateTime.Now.Date });
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Index(Release release) {
+    public IActionResult Add(ReleaseAddDto dto) {
         if (!ModelState.IsValid) {
-            var releases = releaseService.GetReleases();
-            return View(releases);
+            return View(dto);
         }
+
+        var release = new Release {
+            Title = dto.Title,
+            Description = dto.Description,
+            ReleaseDate = dto.ReleaseDate,
+            ArtistsId = dto.ArtistsId,
+            GenreId = dto.GenreId
+        };
 
         releaseService.AddRelease(release);
         return RedirectToAction("Index");

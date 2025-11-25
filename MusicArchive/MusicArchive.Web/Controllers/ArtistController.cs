@@ -14,21 +14,32 @@ public class ArtistController(
         return View(artists);
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Index(Artist artist) {
-        if (!ModelState.IsValid) {
-            var artists = artistService.GetArtists();
-            return View(artists);
-        }
-
-        artistService.AddArtist(artist);
-        return RedirectToAction("Index");
-    }
 
     public IActionResult Detail(int id) {
         var artist = artistService.GetArtist(id);
 
         return View(artist);
+    }
+
+    public IActionResult Add() {
+        return View(new ArtistAddDto { BeginDate = DateTime.Now.Date });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Add(ArtistAddDto dto) {
+        if (!ModelState.IsValid) {
+            return View(dto);
+        }
+
+        var artist = new Artist {
+            Name = dto.Name,
+            BeginDate = dto.BeginDate,
+            EndDate = dto.EndDate,
+            Location = dto.Location
+        };
+
+        artistService.AddArtist(artist);
+        return RedirectToAction("Index");
     }
 }

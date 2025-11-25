@@ -1,0 +1,27 @@
+@model MusicArchive.Web.Models.TrackAddDto
+
+@{
+    ViewBag.Title = "Add Track";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Add", "Track", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="Title">Title</label>
+        <input type="text" id="Title" name="Title" value="@Model?.Title" required />
+    </div>
+    <div>
+        <label for="Duration">Duration (seconds)</label>
+        <input type="number" id="Duration" name="Duration" value="@(Model?.Duration.ToString() ?? string.Empty)" required />
+    </div>
+    <div>
+        <label for="ReleaseId">Release Id</label>
+        <input type="number" id="ReleaseId" name="ReleaseId" value="@(Model?.ReleaseId.ToString() ?? string.Empty)" required />
+    </div>
+    <div>
+        <button type="submit">Add Track</button>
+    </div>
+}

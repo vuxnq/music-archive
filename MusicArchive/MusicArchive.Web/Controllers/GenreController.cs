@@ -14,13 +14,20 @@ public class GenreController(
         return View(genres);
     }
 
+    public IActionResult Add() {
+        return View(new GenreAddDto());
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Index(Genre genre) {
+    public IActionResult Add(GenreAddDto dto) {
         if (!ModelState.IsValid) {
-            var genres = genreService.GetGenres();
-            return View(genres);
+            return View(dto);
         }
+
+        var genre = new Genre {
+            Name = dto.Name
+        };
 
         genreService.AddGenre(genre);
         return RedirectToAction("Index");

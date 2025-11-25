@@ -13,22 +13,6 @@
         </li>
     }
 </ul>
-
-@using (Html.BeginForm("Index", "Track", FormMethod.Post)) {
-    @Html.AntiForgeryToken()
-    <div>
-        <label for="Title">Title</label>
-        <input type="text" id="Title" name="Title" required />
-    </div>
-    <div>
-        <label for="Duration">Duration (seconds)</label>
-        <input type="number" id="Duration" name="Duration" required />
-    </div>
-    <div>
-        <label for="ReleaseId">Release Id</label>
-        <input type="number" id="ReleaseId" name="ReleaseId" required />
-    </div>
-    <div>
-        <button type="submit">Add Track</button>
-    </div>
-}
+<p>
+    @Html.ActionLink("Add new track", "Add", "Track")
+</p>
