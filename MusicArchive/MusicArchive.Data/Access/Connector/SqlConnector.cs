@@ -26,6 +26,10 @@ public class SqlConnector : IDataConnector {
         return new GenreSqlDao(connection);
     }
 
+    public ITrackDao CreateTrackDao() {
+        return new TrackSqlDao(connection);
+    }
+
     public void Dispose() {
         Dispose(true);
         GC.SuppressFinalize(this);

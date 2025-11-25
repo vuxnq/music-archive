@@ -10,9 +10,10 @@ public class Release {
     public int ArtistsId { get; set; }
     public int? GenreId { get; set; }
 
-    public Artist Artist { get; set; }
-    public Genre Genre { get; set; }
-    
+    public Artist? Artist { get; set; }
+    public Genre? Genre { get; set; }
+    public List<Track> Tracks { get; set; } = new List<Track>();
+
     public Release() {}
 
     public override string ToString() {

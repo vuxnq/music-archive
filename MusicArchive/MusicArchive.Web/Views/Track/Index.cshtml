@@ -1,0 +1,34 @@
+@model List<MusicArchive.Domain.Models.Track>
+
+@{
+    ViewBag.Title = "Tracks";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+<ul>
+    @foreach (var track in Model) {
+        <li>
+            @Html.ActionLink(track.Title, "Detail", "Track", new { id = track.Id }, null)
+        </li>
+    }
+</ul>
+
+@using (Html.BeginForm("Index", "Track", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="Title">Title</label>
+        <input type="text" id="Title" name="Title" required />
+    </div>
+    <div>
+        <label for="Duration">Duration (seconds)</label>
+        <input type="number" id="Duration" name="Duration" required />
+    </div>
+    <div>
+        <label for="ReleaseId">Release Id</label>
+        <input type="number" id="ReleaseId" name="ReleaseId" required />
+    </div>
+    <div>
+        <button type="submit">Add Track</button>
+    </div>
+}

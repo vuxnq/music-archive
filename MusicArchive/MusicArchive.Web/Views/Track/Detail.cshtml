@@ -1,0 +1,21 @@
+@model MusicArchive.Domain.Models.Track
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h3>details</h3>
+    <p>Id: @Model.Id</p>
+    <p>Title: @Model.Title</p>
+    <p>Duration: @Model.Duration</p>
+    <p>Release id: @Model.ReleaseId</p>
+</div>
+
+@if (Model.Release != null) {
+    <h3>Release</h3>
+    <p>@Model.Release.Title</p>
+}

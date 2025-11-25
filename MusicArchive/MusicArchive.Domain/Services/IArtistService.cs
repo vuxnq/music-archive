@@ -3,7 +3,7 @@ using MusicArchive.Domain.Models;
 namespace MusicArchive.Domain.Services;
 
 public interface IArtistService {
-    public List<Artist> GetArtists();
-    public Artist GetArtist(int id);
-    public void AddArtist(Artist artist);
+    List<Artist> GetArtists();
+    Artist GetArtist(int id);
+    void AddArtist(Artist artist);
 }

@@ -6,7 +6,7 @@ public class TextConnector : IDataConnector
     public TextConnector() {
         this.textFilesPath = GlobalConnector.GetFilesPath();
     }
-    
+
     public IReleaseDao CreateReleaseDao() {
         return new ReleaseTextDao(textFilesPath + "release.json");
     }
@@ -18,6 +18,10 @@ public class TextConnector : IDataConnector
     public IGenreDao CreateGenreDao() {
         return new GenreTextDao(textFilesPath + "genre.json");
     }
-    
+
+    public ITrackDao CreateTrackDao() {
+        return new TrackTextDao(textFilesPath + "track.json");
+    }
+
     public void Dispose() {}
 }

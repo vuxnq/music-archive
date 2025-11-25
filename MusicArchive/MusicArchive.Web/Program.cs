@@ -19,6 +19,7 @@ public class Program
         builder.Services.AddScoped<IArtistService, ArtistService>();
         builder.Services.AddScoped<IGenreService, GenreService>();
         builder.Services.AddScoped<IReleaseService, ReleaseService>();
+        builder.Services.AddScoped<ITrackService, TrackService>();
 
         var app = builder.Build();
 
