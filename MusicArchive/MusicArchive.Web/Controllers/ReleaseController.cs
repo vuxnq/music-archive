@@ -6,8 +6,7 @@ using MusicArchive.Web.Models;
 namespace MusicArchive.Web.Controllers;
 
 public class ReleaseController(
-    IReleaseService releaseService,
-    ITrackService trackService
+    IReleaseService releaseService
 ) : Controller {
 
     public IActionResult Index() {
@@ -31,18 +30,14 @@ public class ReleaseController(
             Description = dto.Description,
             ReleaseDate = dto.ReleaseDate,
             ArtistsId = dto.ArtistsId,
-            GenreId = dto.GenreId
-        };
-        releaseService.AddRelease(release);
-
-        foreach (var t in dto.Tracks) {
-            var track = new Track {
+            GenreId = dto.GenreId,
+            Tracks = dto.Tracks?.Select(t => new Track {
                 Title = t.Title,
-                Duration = t.Duration,
-                ReleaseId = release.Id
-            };
-            trackService.AddTrack(track);
-        }
+                Duration = t.Duration
+            }).ToList() ?? new List<Track>()
+        };
+
+        releaseService.AddRelease(release);
 
         return RedirectToAction("Index");
     }

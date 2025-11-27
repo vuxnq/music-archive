@@ -24,8 +24,16 @@ public class GenreService(IDataConnector connector) : IGenreService {
     }
 
     public void AddGenre(Genre genre) {
-        var data = genre.ToData();
-        _genreDao.AddGenre(data);
-        genre.Id = data.Id;
+        connector.BeginTransaction();
+        try {
+            var data = genre.ToData();
+            _genreDao.AddGenre(data);
+            genre.Id = data.Id;
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
     }
 }

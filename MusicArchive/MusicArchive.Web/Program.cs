@@ -45,3 +45,8 @@ public class Program
         app.Run();
     }
 }
+
+// TODO: udelat trivialni login
+// - pridat user do databaze,
+// - vytvorit user model bude mit Id, string Username, string Password (nebude zahashovany nic, pro jednoduchost)
+// - rucne pridat do databaze usera admin:password1

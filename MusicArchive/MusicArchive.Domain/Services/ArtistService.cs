@@ -14,7 +14,7 @@ public class ArtistService(IDataConnector connector) : IArtistService {
 
     public Artist GetArtist(int id) {
         var artist = _artistDao.GetArtist(id).ToDomain();
-        
+
         artist.Releases = _releaseDao.GetReleases().ToDomain()
             .Where(r => r.ArtistsId == id)
             .ToList();
@@ -23,8 +23,16 @@ public class ArtistService(IDataConnector connector) : IArtistService {
     }
 
     public void AddArtist(Artist artist) {
-        var data = artist.ToData();
-        _artistDao.AddArtist(data);
-        artist.Id = data.Id;
+        connector.BeginTransaction();
+        try {
+            var data = artist.ToData();
+            _artistDao.AddArtist(data);
+            artist.Id = data.Id;
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
     }
 }

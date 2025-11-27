@@ -5,6 +5,7 @@ namespace MusicArchive.Data;
 public class SqlConnector : IDataConnector {
     private string connectionString;
     private SqliteConnection connection;
+    private SqliteTransaction? transaction;
     private bool disposed = false;
 
     public SqlConnector() {
@@ -38,8 +39,30 @@ public class SqlConnector : IDataConnector {
     protected virtual void Dispose(bool disposing) {
         if (disposed) return;
         if (disposing) {
+            try {
+                transaction?.Dispose();
+            } catch {}
             connection?.Dispose();
         }
         disposed = true;
+    }
+
+    public void BeginTransaction() {
+        if (transaction != null) return;
+        transaction = connection.BeginTransaction();
+    }
+
+    public void Commit() {
+        if (transaction == null) return;
+        transaction.Commit();
+        transaction.Dispose();
+        transaction = null;
+    }
+
+    public void Rollback() {
+        if (transaction == null) return;
+        transaction.Rollback();
+        transaction.Dispose();
+        transaction = null;
     }
 }

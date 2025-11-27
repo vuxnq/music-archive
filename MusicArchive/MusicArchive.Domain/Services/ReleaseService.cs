@@ -29,8 +29,25 @@ public class ReleaseService(IDataConnector connector) : IReleaseService {
     }
 
     public void AddRelease(Release release) {
-        var data = release.ToData();
-        _releaseDao.AddRelease(data);
-        release.Id = data.Id;
+        connector.BeginTransaction();
+        try {
+            var data = release.ToData();
+            _releaseDao.AddRelease(data);
+            release.Id = data.Id;
+
+            if (release.Tracks != null) {
+                foreach (var track in release.Tracks) {
+                    var tdata = track.ToData();
+                    tdata.ReleaseId = release.Id;
+                    _trackDao.AddTrack(tdata);
+                    track.Id = tdata.Id;
+                }
+            }
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
     }
 }

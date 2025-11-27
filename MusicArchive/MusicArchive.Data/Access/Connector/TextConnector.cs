@@ -24,4 +24,8 @@ public class TextConnector : IDataConnector
     }
 
     public void Dispose() {}
+
+    public void BeginTransaction() {}
+    public void Commit() {}
+    public void Rollback() {}
 }
