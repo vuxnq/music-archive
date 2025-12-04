@@ -23,6 +23,10 @@ public class TextConnector : IDataConnector
         return new TrackTextDao(textFilesPath + "track.json");
     }
 
+    public IUserDao CreateUserDao() {
+        return new UserTextDao(textFilesPath + "user.json");
+    }
+
     public void Dispose() {}
 
     public void BeginTransaction() {}

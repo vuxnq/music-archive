@@ -15,6 +15,13 @@ public class Program
 
         builder.Services.AddScoped<IDataConnector, SqlConnector>();
         // builder.Services.AddScoped<IDataConnector, TextConnector>();
+        builder.Services.AddScoped<IUserService, UserService>();
+
+        // Configure cookie authentication for simple login
+        builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options => {
+                options.LoginPath = "/User/Login";
+            });
 
         builder.Services.AddScoped<IArtistService, ArtistService>();
         builder.Services.AddScoped<IGenreService, GenreService>();
@@ -36,6 +43,7 @@ public class Program
 
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllerRoute(

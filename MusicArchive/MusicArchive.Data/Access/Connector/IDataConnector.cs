@@ -6,6 +6,7 @@ public interface IDataConnector : IDisposable
     public IArtistDao CreateArtistDao();
     public IGenreDao CreateGenreDao();
     public ITrackDao CreateTrackDao();
+    public IUserDao CreateUserDao();
 
     public void BeginTransaction();
     public void Commit();
