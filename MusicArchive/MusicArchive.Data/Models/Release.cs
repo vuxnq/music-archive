@@ -9,6 +9,7 @@ public class Release {
     public DateTime ReleaseDate { get; set; }
     public int ArtistsId { get; set; }
     public int? GenreId { get; set; }
+    public bool Approved { get; set; }
 
     public Release() {}
 
@@ -19,9 +20,10 @@ public class Release {
         ReleaseDate = reader.IsDBNull(3) ? DateTime.MinValue : reader.GetDateTime(3);
         ArtistsId = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);
         GenreId = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5);
+        Approved = reader.IsDBNull(6) ? false : reader.GetBoolean(6);
     }
 
     public override string ToString() {
-        return $"id: {Id}, title: {Title}, description: {Description}, releaseDate: {ReleaseDate}, artistsId: {ArtistsId}, genreId: {GenreId}";
+        return $"id: {Id}, title: {Title}, description: {Description}, releaseDate: {ReleaseDate}, artistsId: {ArtistsId}, genreId: {GenreId}, approved: {Approved}";
     }
 }

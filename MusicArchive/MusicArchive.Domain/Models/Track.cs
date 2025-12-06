@@ -7,6 +7,7 @@ public class Track {
     public string Title { get; set; }
     public int Duration { get; set; }
     public int ReleaseId { get; set; }
+    public bool Approved { get; set; }
 
     public Release? Release { get; set; }
 

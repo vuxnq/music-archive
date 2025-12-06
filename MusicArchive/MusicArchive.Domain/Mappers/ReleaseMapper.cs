@@ -10,14 +10,15 @@ public static class ReleaseMapper {
             Description = data.Description,
             ReleaseDate = data.ReleaseDate,
             ArtistsId = data.ArtistsId,
-            GenreId = data.GenreId
+            GenreId = data.GenreId,
+            Approved = data.Approved
         };
     }
 
     public static List<Release> ToDomain(this IEnumerable<MusicArchive.Data.Models.Release> list) {
         return list.Select(x => x.ToDomain()).ToList();
     }
-    
+
     public static MusicArchive.Data.Models.Release ToData(this Release domain) {
         return new MusicArchive.Data.Models.Release {
             Id = domain.Id,
@@ -25,10 +26,11 @@ public static class ReleaseMapper {
             Description = domain.Description,
             ReleaseDate = domain.ReleaseDate,
             ArtistsId = domain.ArtistsId,
-            GenreId = domain.GenreId
+            GenreId = domain.GenreId,
+            Approved = domain.Approved
         };
     }
-    
+
     public static List<MusicArchive.Data.Models.Release> ToData(this IEnumerable<Release> list) {
         return list.Select(x => x.ToData()).ToList();
     }

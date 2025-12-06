@@ -8,6 +8,7 @@ public class Artist {
     public DateTime BeginDate { get; set; }
     public DateTime? EndDate { get; set; }
     public string? Location { get; set; }
+    public bool Approved { get; set; }
 
     public Artist() {}
 
@@ -17,9 +18,10 @@ public class Artist {
         BeginDate = reader.IsDBNull(2) ? DateTime.MinValue : reader.GetDateTime(2);
         EndDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3);
         Location = reader.IsDBNull(4) ? (string?)null : reader.GetString(4);
+        Approved = reader.IsDBNull(5) ? false : reader.GetBoolean(5);
     }
 
     public override string ToString() {
-        return $"id: {Id}, name: {Name}, beginDate: {BeginDate}, endDate: {EndDate}, location: {Location}";
+        return $"id: {Id}, name: {Name}, beginDate: {BeginDate}, endDate: {EndDate}, location: {Location}, approved: {Approved}";
     }
 }

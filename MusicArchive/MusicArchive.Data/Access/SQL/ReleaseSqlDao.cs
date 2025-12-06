@@ -14,7 +14,7 @@ public class ReleaseSqlDao : IReleaseDao {
         var result = new List<Release>();
 
         var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, title, description, releaseDate, artistId, genreId FROM release";
+        cmd.CommandText = "SELECT id, title, description, releaseDate, artistId, genreId, approved FROM release";
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read()) {
@@ -25,7 +25,7 @@ public class ReleaseSqlDao : IReleaseDao {
 
     public Release GetRelease(int id) {
         var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, title, description, releaseDate, artistId, genreId FROM release WHERE id = $id";
+        cmd.CommandText = "SELECT id, title, description, releaseDate, artistId, genreId, approved FROM release WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
 
         using var reader = cmd.ExecuteReader();
@@ -36,9 +36,10 @@ public class ReleaseSqlDao : IReleaseDao {
 
     public void AddRelease(Release release) {
         var cmd = connection.CreateCommand();
+
         cmd.CommandText = @"
-            INSERT INTO ""release"" (title, description, releaseDate, artistId, genreId)
-            VALUES ($title, $description, $releaseDate, $artistId, $genreId);
+            INSERT INTO ""release"" (title, description, releaseDate, artistId, genreId, approved)
+            VALUES ($title, $description, $releaseDate, $artistId, $genreId, $approved);
             SELECT last_insert_rowid();
         ";
 
@@ -48,6 +49,7 @@ public class ReleaseSqlDao : IReleaseDao {
         cmd.Parameters.AddWithValue("$artistId", release.ArtistsId);
         if (release.GenreId.HasValue) cmd.Parameters.AddWithValue("$genreId", release.GenreId.Value);
         else cmd.Parameters.AddWithValue("$genreId", DBNull.Value);
+        cmd.Parameters.AddWithValue("$approved", release.Approved);
 
         var result = cmd.ExecuteScalar();
         if (result != null && long.TryParse(result.ToString(), out var id)) {

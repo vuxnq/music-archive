@@ -8,7 +8,8 @@ public static class TrackMapper {
             Id = data.Id,
             Title = data.Title,
             Duration = data.Duration,
-            ReleaseId = data.ReleaseId
+            ReleaseId = data.ReleaseId,
+            Approved = data.Approved
         };
     }
 
@@ -21,7 +22,8 @@ public static class TrackMapper {
             Id = domain.Id,
             Title = domain.Title,
             Duration = domain.Duration,
-            ReleaseId = domain.ReleaseId
+            ReleaseId = domain.ReleaseId,
+            Approved = domain.Approved
         };
     }
 

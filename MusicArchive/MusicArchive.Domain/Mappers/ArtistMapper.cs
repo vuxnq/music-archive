@@ -10,6 +10,7 @@ public static class ArtistMapper {
             BeginDate = data.BeginDate,
             EndDate = data.EndDate,
             Location = data.Location,
+            Approved = data.Approved,
         };
     }
 
@@ -24,6 +25,7 @@ public static class ArtistMapper {
             BeginDate = domain.BeginDate,
             EndDate = domain.EndDate,
             Location = domain.Location,
+            Approved = domain.Approved,
         };
     }
 

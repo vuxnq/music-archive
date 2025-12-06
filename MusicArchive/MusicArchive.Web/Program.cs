@@ -17,7 +17,7 @@ public class Program
         // builder.Services.AddScoped<IDataConnector, TextConnector>();
         builder.Services.AddScoped<IUserService, UserService>();
 
-        // Configure cookie authentication for simple login
+        // Configure cookie authentication
         builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options => {
                 options.LoginPath = "/User/Login";
@@ -53,8 +53,3 @@ public class Program
         app.Run();
     }
 }
-
-// TODO: udelat trivialni login
-// - pridat user do databaze,
-// - vytvorit user model bude mit Id, string Username, string Password (nebude zahashovany nic, pro jednoduchost)
-// - rucne pridat do databaze usera admin:password1

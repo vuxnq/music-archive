@@ -4,7 +4,7 @@ BEGIN TRANSACTION;
 
 CREATE TABLE IF NOT EXISTS user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT NOT NULL,
+  username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL
 );
 
@@ -13,12 +13,14 @@ CREATE TABLE IF NOT EXISTS artist (
   name TEXT NOT NULL,
   beginDate TEXT NOT NULL,
   endDate TEXT,
-  location TEXT
+  location TEXT,
+  approved INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS genre (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL
+  name TEXT NOT NULL,
+  approved INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS "release" (
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS "release" (
   releaseDate TEXT NOT NULL,
   artistId INTEGER NOT NULL,
   genreId INTEGER,
+  approved INTEGER NOT NULL DEFAULT 0,
   FOREIGN KEY (artistId) REFERENCES artist(id) ON DELETE CASCADE,
   FOREIGN KEY (genreId) REFERENCES genre(id) ON DELETE SET NULL
 );
@@ -37,7 +40,11 @@ CREATE TABLE IF NOT EXISTS track (
   title TEXT NOT NULL,
   duration INTEGER NOT NULL,
   releaseId INTEGER NOT NULL,
+  approved INTEGER NOT NULL DEFAULT 0,
   FOREIGN KEY (releaseId) REFERENCES "release"(id) ON DELETE CASCADE
 );
+
+INSERT OR IGNORE INTO user (username, password) VALUES ('user', 'user');
+INSERT OR IGNORE INTO user (username, password) VALUES ('admin', 'admin');
 
 COMMIT;

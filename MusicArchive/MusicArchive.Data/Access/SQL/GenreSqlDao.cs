@@ -14,7 +14,7 @@ public class GenreSqlDao : IGenreDao {
         var result = new List<Genre>();
 
         var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, name FROM genre";
+        cmd.CommandText = "SELECT id, name, approved FROM genre";
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read()) {
@@ -25,7 +25,7 @@ public class GenreSqlDao : IGenreDao {
 
     public Genre GetGenre(int id) {
         var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, name FROM genre WHERE id = $id";
+        cmd.CommandText = "SELECT id, name, approved FROM genre WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
 
         using var reader = cmd.ExecuteReader();
@@ -38,12 +38,13 @@ public class GenreSqlDao : IGenreDao {
     public void AddGenre(Genre genre) {
         var cmd = connection.CreateCommand();
         cmd.CommandText = @"
-            INSERT INTO genre (name)
-            VALUES ($name);
+            INSERT INTO genre (name, approved)
+            VALUES ($name, $approved);
             SELECT last_insert_rowid();
         ";
 
         cmd.Parameters.AddWithValue("$name", genre.Name);
+        cmd.Parameters.AddWithValue("$approved", genre.Approved);
 
         var result = cmd.ExecuteScalar();
         if (result != null && long.TryParse(result.ToString(), out var id)) {

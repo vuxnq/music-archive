@@ -7,6 +7,7 @@ public class Track {
     public string Title { get; set; }
     public int Duration { get; set; }
     public int ReleaseId { get; set; }
+    public bool Approved { get; set; }
 
     public Track() {}
 
@@ -15,9 +16,10 @@ public class Track {
         Title = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
         Duration = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
         ReleaseId = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
+        Approved = reader.IsDBNull(4) ? false : reader.GetBoolean(4);
     }
 
     public override string ToString() {
-        return $"id: {Id}, title: {Title}, duration: {Duration}, releaseId: {ReleaseId}";
+        return $"id: {Id}, title: {Title}, duration: {Duration}, releaseId: {ReleaseId}, approved: {Approved}";
     }
 }
