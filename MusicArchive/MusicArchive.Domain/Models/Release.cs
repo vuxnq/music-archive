@@ -9,11 +9,11 @@ public class Release {
     public DateTime ReleaseDate { get; set; }
     public int ArtistsId { get; set; }
     public int? GenreId { get; set; }
-    public bool Approved { get; set; }
+    public bool IsApproved { get; set; }
 
     public Artist? Artist { get; set; }
     public Genre? Genre { get; set; }
-    public List<Track> Tracks { get; set; } = new List<Track>();
+    public List<Track> Tracks { get; set; } = [];
 
     public Release() {}
 

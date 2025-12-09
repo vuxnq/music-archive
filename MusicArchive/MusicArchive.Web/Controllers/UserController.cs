@@ -3,14 +3,23 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using MusicArchive.Domain.Services;
-using MusicArchive.Domain.Models;
-using MusicArchive.Web.Models;
 
 namespace MusicArchive.Web.Controllers;
+
 
 public class UserController(
     IUserService userService
 ) : Controller {
+
+    public IActionResult Index() {
+        var users = userService.GetUsers();
+        return View(users);
+    }
+
+    public IActionResult Detail(int id) {
+        var user = userService.GetUser(id);
+        return View(user);
+    }
 
     public IActionResult Login() {
         return View();
@@ -24,7 +33,8 @@ public class UserController(
             if (user.Password == password) {
                 var claims = new List<Claim> {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Role, user.IsModerator ? "Moderator" : "User")
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

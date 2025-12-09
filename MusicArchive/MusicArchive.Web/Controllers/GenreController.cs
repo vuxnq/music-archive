@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicArchive.Domain.Services;
 using MusicArchive.Domain.Models;
@@ -10,16 +11,18 @@ public class GenreController(
 ) : Controller {
 
     public IActionResult Index() {
-        var genres = genreService.GetGenres();
+        var genres = genreService.GetApprovedGenres();
         return View(genres);
     }
 
+    [Authorize]
     public IActionResult Add() {
         return View(new GenreAddDto());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize]
     public IActionResult Add(GenreAddDto dto) {
         if (!ModelState.IsValid) {
             return View(dto);

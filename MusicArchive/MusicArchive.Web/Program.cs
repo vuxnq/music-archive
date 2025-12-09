@@ -13,20 +13,21 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddScoped<IDataConnector, SqlConnector>();
-        // builder.Services.AddScoped<IDataConnector, TextConnector>();
-        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddSingleton<IDataConnector, SqlConnector>();
+        // builder.Services.AddSingleton<IDataConnector, TextConnector>();
 
         // Configure cookie authentication
         builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options => {
                 options.LoginPath = "/User/Login";
+                options.AccessDeniedPath = "/";
             });
 
         builder.Services.AddScoped<IArtistService, ArtistService>();
         builder.Services.AddScoped<IGenreService, GenreService>();
         builder.Services.AddScoped<IReleaseService, ReleaseService>();
         builder.Services.AddScoped<ITrackService, TrackService>();
+        builder.Services.AddScoped<IUserService, UserService>();
 
         var app = builder.Build();
 

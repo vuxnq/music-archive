@@ -6,6 +6,8 @@ public class User {
     public int Id { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
+    public bool IsModerator { get; set; }
+
 
     public User() {}
 
@@ -13,6 +15,7 @@ public class User {
         Id = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
         Username = reader.IsDBNull(1) ? string.Empty : reader.GetString(1);
         Password = reader.IsDBNull(2) ? string.Empty : reader.GetString(2);
+        IsModerator = reader.IsDBNull(3) ? false : reader.GetBoolean(3);
     }
 
     public override string ToString() {

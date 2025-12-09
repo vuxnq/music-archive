@@ -8,14 +8,21 @@ public class GenreService(IDataConnector connector) : IGenreService {
     private readonly IReleaseDao _releaseDao = connector.CreateReleaseDao();
     private readonly IGenreDao _genreDao = connector.CreateGenreDao();
 
-    
     public List<Genre> GetGenres() {
         return _genreDao.GetGenres().ToDomain();
     }
 
+    public List<Genre> GetUnapprovedGenres() {
+        return GetGenres().Where(g => !g.IsApproved).ToList();
+    }
+    
+    public List<Genre> GetApprovedGenres() {
+        return GetGenres().Where(g => g.IsApproved).ToList();
+    }
+
     public Genre GetGenre(int id) {
         var genre = _genreDao.GetGenre(id).ToDomain();
-        
+
         genre.Releases = _releaseDao.GetReleases().ToDomain()
             .Where(r => r.GenreId == id)
             .ToList();

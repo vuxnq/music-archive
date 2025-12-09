@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicArchive.Domain.Services;
 using MusicArchive.Domain.Models;
@@ -10,16 +11,18 @@ public class TrackController(
 ) : Controller {
 
     public IActionResult Index() {
-        var tracks = trackService.GetTracks();
+        var tracks = trackService.GetApprovedTracks();
         return View(tracks);
     }
 
+    [Authorize]
     public IActionResult Add() {
         return View(new TrackAddDto());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize]
     public IActionResult Add(TrackAddDto dto) {
         if (!ModelState.IsValid) {
             return View(dto);

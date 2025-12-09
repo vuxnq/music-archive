@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicArchive.Domain.Services;
 using MusicArchive.Domain.Models;
@@ -10,10 +11,9 @@ public class ArtistController(
 ) : Controller {
 
     public IActionResult Index() {
-        var artists = artistService.GetArtists();
+        var artists = artistService.GetApprovedArtists();
         return View(artists);
     }
-
 
     public IActionResult Detail(int id) {
         var artist = artistService.GetArtist(id);
@@ -21,12 +21,14 @@ public class ArtistController(
         return View(artist);
     }
 
+    [Authorize]
     public IActionResult Add() {
         return View(new ArtistAddDto { BeginDate = DateTime.Now.Date });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize]
     public IActionResult Add(ArtistAddDto dto) {
         if (!ModelState.IsValid) {
             return View(dto);

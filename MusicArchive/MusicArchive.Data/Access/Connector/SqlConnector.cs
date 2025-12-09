@@ -3,36 +3,35 @@ using Microsoft.Data.Sqlite;
 namespace MusicArchive.Data;
 
 public class SqlConnector : IDataConnector {
-    private string connectionString;
-    private SqliteConnection connection;
-    private SqliteTransaction? transaction;
-    private bool disposed = false;
+    private readonly SqliteConnection _connection;
+    private SqliteTransaction? _transaction;
+    private bool _disposed = false;
 
     public SqlConnector() {
-        this.connectionString = GlobalConnector.GetConnectionString();
+        var connectionString = GlobalConnector.GetConnectionString();
         SQLitePCL.Batteries.Init();
-        connection = new SqliteConnection(connectionString);
-        connection.Open();
+        _connection = new SqliteConnection(connectionString);
+        _connection.Open();
     }
 
     public IReleaseDao CreateReleaseDao() {
-        return new ReleaseSqlDao(connection);
+        return new ReleaseSqlDao(_connection);
     }
 
     public IArtistDao CreateArtistDao() {
-        return new ArtistSqlDao(connection);
+        return new ArtistSqlDao(_connection);
     }
 
     public IGenreDao CreateGenreDao() {
-        return new GenreSqlDao(connection);
+        return new GenreSqlDao(_connection);
     }
 
     public ITrackDao CreateTrackDao() {
-        return new TrackSqlDao(connection);
+        return new TrackSqlDao(_connection);
     }
 
     public IUserDao CreateUserDao() {
-        return new UserSqlDao(connection);
+        return new UserSqlDao(_connection);
     }
 
     public void Dispose() {
@@ -41,32 +40,32 @@ public class SqlConnector : IDataConnector {
     }
 
     protected virtual void Dispose(bool disposing) {
-        if (disposed) return;
+        if (_disposed) return;
         if (disposing) {
             try {
-                transaction?.Dispose();
+                _transaction?.Dispose();
             } catch {}
-            connection?.Dispose();
+            _connection?.Dispose();
         }
-        disposed = true;
+        _disposed = true;
     }
 
     public void BeginTransaction() {
-        if (transaction != null) return;
-        transaction = connection.BeginTransaction();
+        if (_transaction != null) return;
+        _transaction = _connection.BeginTransaction();
     }
 
     public void Commit() {
-        if (transaction == null) return;
-        transaction.Commit();
-        transaction.Dispose();
-        transaction = null;
+        if (_transaction == null) return;
+        _transaction.Commit();
+        _transaction.Dispose();
+        _transaction = null;
     }
 
     public void Rollback() {
-        if (transaction == null) return;
-        transaction.Rollback();
-        transaction.Dispose();
-        transaction = null;
+        if (_transaction == null) return;
+        _transaction.Rollback();
+        _transaction.Dispose();
+        _transaction = null;
     }
 }

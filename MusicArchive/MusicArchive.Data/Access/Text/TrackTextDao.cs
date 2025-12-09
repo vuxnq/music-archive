@@ -4,7 +4,7 @@ using MusicArchive.Data.Models;
 namespace MusicArchive.Data;
 
 public class TrackTextDao : ITrackDao {
-    private string filePath;
+    private readonly string filePath;
 
     public TrackTextDao(string filePath) {
         this.filePath = filePath;

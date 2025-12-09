@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicArchive.Domain.Services;
 using MusicArchive.Domain.Models;
@@ -10,16 +11,18 @@ public class ReleaseController(
 ) : Controller {
 
     public IActionResult Index() {
-        var releases = releaseService.GetReleases();
+        var releases = releaseService.GetApprovedReleases();
         return View(releases);
     }
 
+    [Authorize]
     public IActionResult Add() {
         return View(new ReleaseAddDto { ReleaseDate = DateTime.Now.Date });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize]
     public IActionResult Add(ReleaseAddDto dto) {
         if (!ModelState.IsValid) {
             return View(dto);

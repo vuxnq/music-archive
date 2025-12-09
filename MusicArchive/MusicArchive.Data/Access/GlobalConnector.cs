@@ -9,7 +9,7 @@ public enum GlobalConnectorDataSource {
 
 public static class GlobalConnector {
     private static GlobalConnectorDataSource _dataSource = GlobalConnectorDataSource.Sqlite;
-    
+
     public static IDataConnector CreateConnection() {
         if (_dataSource == GlobalConnectorDataSource.Sqlite) {
             return new SqlConnector();

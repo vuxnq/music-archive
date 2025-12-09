@@ -1,4 +1,4 @@
-@model MusicArchive.Web.Models.GenreAddDto
+@model GenreAddDto
 
 @{
     ViewBag.Title = "Add Genre";
@@ -12,6 +12,10 @@
     <div>
         <label for="Name">Name</label>
         <input type="text" id="Name" name="Name" value="@Model?.Name" required />
+    </div>
+    <div>
+        <label for="Description">Description</label>
+        <input type="text" id="Description" name="Description" value="@Model?.Description" />
     </div>
     <div>
         <button type="submit">Add Genre</button>

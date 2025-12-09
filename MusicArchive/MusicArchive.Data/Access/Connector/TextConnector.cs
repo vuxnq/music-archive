@@ -2,29 +2,29 @@ namespace MusicArchive.Data;
 
 public class TextConnector : IDataConnector
 {
-    private string textFilesPath;
+    private readonly string _textFilesPath;
     public TextConnector() {
-        this.textFilesPath = GlobalConnector.GetFilesPath();
+        _textFilesPath = GlobalConnector.GetFilesPath();
     }
 
     public IReleaseDao CreateReleaseDao() {
-        return new ReleaseTextDao(textFilesPath + "release.json");
+        return new ReleaseTextDao(_textFilesPath + "release.json");
     }
 
     public IArtistDao CreateArtistDao() {
-        return new ArtistTextDao(textFilesPath + "artist.json");
+        return new ArtistTextDao(_textFilesPath + "artist.json");
     }
 
     public IGenreDao CreateGenreDao() {
-        return new GenreTextDao(textFilesPath + "genre.json");
+        return new GenreTextDao(_textFilesPath + "genre.json");
     }
 
     public ITrackDao CreateTrackDao() {
-        return new TrackTextDao(textFilesPath + "track.json");
+        return new TrackTextDao(_textFilesPath + "track.json");
     }
 
     public IUserDao CreateUserDao() {
-        return new UserTextDao(textFilesPath + "user.json");
+        return new UserTextDao(_textFilesPath + "user.json");
     }
 
     public void Dispose() {}

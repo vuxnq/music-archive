@@ -12,6 +12,14 @@ public class TrackService(IDataConnector connector) : ITrackService {
         return _trackDao.GetTracks().ToDomain();
     }
 
+    public List<Track> GetUnapprovedTracks() {
+        return GetTracks().Where(r => !r.IsApproved).ToList();
+    }
+    
+    public List<Track> GetApprovedTracks() {
+        return GetTracks().Where(r => r.IsApproved).ToList();
+    }
+
     public Track GetTrack(int id) {
         var track = _trackDao.GetTrack(id).ToDomain();
         track.Release = _releaseDao.GetRelease(track.ReleaseId).ToDomain();

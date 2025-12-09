@@ -3,33 +3,35 @@ using MusicArchive.Domain.Models;
 namespace MusicArchive.Domain.Mappers;
 
 public static class ArtistMapper {
-    public static Artist ToDomain(this MusicArchive.Data.Models.Artist data) {
+    public static Artist ToDomain(this Data.Models.Artist data) {
         return new Artist {
             Id = data.Id,
             Name = data.Name,
+            Description = data.Description,
             BeginDate = data.BeginDate,
             EndDate = data.EndDate,
             Location = data.Location,
-            Approved = data.Approved,
+            IsApproved = data.IsApproved,
         };
     }
 
-    public static List<Artist> ToDomain(this IEnumerable<MusicArchive.Data.Models.Artist> list) {
+    public static List<Artist> ToDomain(this IEnumerable<Data.Models.Artist> list) {
         return list.Select(x => x.ToDomain()).ToList();
     }
 
-    public static MusicArchive.Data.Models.Artist ToData(this Artist domain) {
-        return new MusicArchive.Data.Models.Artist {
+    public static Data.Models.Artist ToData(this Artist domain) {
+        return new Data.Models.Artist {
             Id = domain.Id,
             Name = domain.Name,
+            Description = domain.Description,
             BeginDate = domain.BeginDate,
             EndDate = domain.EndDate,
             Location = domain.Location,
-            Approved = domain.Approved,
+            IsApproved = domain.IsApproved,
         };
     }
 
-    public static List<MusicArchive.Data.Models.Artist> ToData(this IEnumerable<Artist> list) {
+    public static List<Data.Models.Artist> ToData(this IEnumerable<Artist> list) {
         return list.Select(x => x.ToData()).ToList();
     }
 }

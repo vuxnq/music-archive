@@ -14,6 +14,14 @@ public class ReleaseService(IDataConnector connector) : IReleaseService {
         return _releaseDao.GetReleases().ToDomain();
     }
 
+    public List<Release> GetUnapprovedReleases() {
+        return GetReleases().Where(r => !r.IsApproved).ToList();
+    }
+    
+    public List<Release> GetApprovedReleases() {
+        return GetReleases().Where(r => r.IsApproved).ToList();
+    }
+
     public Release GetRelease(int id) {
         var release = _releaseDao.GetRelease(id).ToDomain();
 

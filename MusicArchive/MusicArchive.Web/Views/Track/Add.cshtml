@@ -1,4 +1,4 @@
-@model MusicArchive.Web.Models.TrackAddDto
+@model TrackAddDto
 
 @{
     ViewBag.Title = "Add Track";
@@ -12,6 +12,10 @@
     <div>
         <label for="Title">Title</label>
         <input type="text" id="Title" name="Title" value="@Model?.Title" required />
+    </div>
+    <div>
+        <label for="Description">Description</label>
+        <input type="text" id="Description" name="Description" value="@Model?.Description" />
     </div>
     <div>
         <label for="Duration">Duration (seconds)</label>

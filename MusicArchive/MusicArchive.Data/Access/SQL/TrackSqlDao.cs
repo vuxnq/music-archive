@@ -4,17 +4,17 @@ using MusicArchive.Data.Models;
 namespace MusicArchive.Data;
 
 public class TrackSqlDao : ITrackDao {
-    private SqliteConnection connection;
+    private readonly SqliteConnection _connection;
 
     public TrackSqlDao(SqliteConnection connection) {
-        this.connection = connection;
+        _connection = connection;
     }
 
     public List<Track> GetTracks() {
         var result = new List<Track>();
 
-        var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, title, duration, releaseId, approved FROM track";
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = "SELECT id, title, description, duration, releaseId, isApproved FROM track";
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read()) {
@@ -24,8 +24,8 @@ public class TrackSqlDao : ITrackDao {
     }
 
     public Track GetTrack(int id) {
-        var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, title, duration, releaseId, approved FROM track WHERE id = $id";
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = "SELECT id, title, description, duration, releaseId, isApproved FROM track WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
 
         using var reader = cmd.ExecuteReader();
@@ -35,17 +35,18 @@ public class TrackSqlDao : ITrackDao {
     }
 
     public void AddTrack(Track track) {
-        var cmd = connection.CreateCommand();
+        var cmd = _connection.CreateCommand();
         cmd.CommandText = @"
-            INSERT INTO track (title, duration, releaseId, approved)
-            VALUES ($title, $duration, $releaseId, $approved);
+            INSERT INTO track (title, description, duration, releaseId, isApproved)
+            VALUES ($title, $description, $duration, $releaseId, $isApproved);
             SELECT last_insert_rowid();
         ";
 
         cmd.Parameters.AddWithValue("$title", track.Title);
+        cmd.Parameters.AddWithValue("$description", track.Description ?? (object)DBNull.Value);
         cmd.Parameters.AddWithValue("$duration", track.Duration);
         cmd.Parameters.AddWithValue("$releaseId", track.ReleaseId);
-        cmd.Parameters.AddWithValue("$approved", track.Approved);
+        cmd.Parameters.AddWithValue("$isApproved", track.IsApproved);
 
         var result = cmd.ExecuteScalar();
         if (result != null && long.TryParse(result.ToString(), out var id)) {

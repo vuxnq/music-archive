@@ -1,20 +1,17 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using MusicArchive.Domain.Services;
 using MusicArchive.Web.Models;
 
 namespace MusicArchive.Web.Controllers;
 
 public class HomeController(
-    ILogger<HomeController> logger
+    IArtistService artistService
 ) : Controller {
-    private readonly ILogger<HomeController> _logger = logger;
 
     public IActionResult Index() {
-        return View();
-    }
-
-    public IActionResult Privacy() {
-        return View();
+        var artists = artistService.GetApprovedArtists();
+        return View(artists);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

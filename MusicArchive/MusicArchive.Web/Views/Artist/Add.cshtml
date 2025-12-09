@@ -14,6 +14,10 @@
         <input type="text" id="Name" name="Name" value="@Model?.Name" required />
     </div>
     <div>
+        <label for="Description">Description</label>
+        <input type="text" id="Description" name="Description" value="@Model?.Description" />
+    </div>
+    <div>
         <label for="BeginDate">Begin date</label>
         <input type="date" id="BeginDate" name="BeginDate" value="@(Model?.BeginDate.ToString("yyyy-MM-dd") ?? string.Empty)" required />
     </div>

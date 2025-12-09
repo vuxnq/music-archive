@@ -12,6 +12,14 @@ public class ArtistService(IDataConnector connector) : IArtistService {
         return _artistDao.GetArtists().ToDomain();
     }
 
+    public List<Artist> GetUnapprovedArtists() {
+        return GetArtists().Where(a => !a.IsApproved).ToList();
+    }
+    
+    public List<Artist> GetApprovedArtists() {
+        return GetArtists().Where(a => a.IsApproved).ToList();
+    }
+
     public Artist GetArtist(int id) {
         var artist = _artistDao.GetArtist(id).ToDomain();
 

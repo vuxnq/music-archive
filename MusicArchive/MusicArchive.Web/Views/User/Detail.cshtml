@@ -1,0 +1,15 @@
+@model MusicArchive.Domain.Models.User
+
+@{
+    ViewBag.Title = Model.Username;
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h3>Details</h3>
+    <p>Id: @Model.Id</p>
+    <p>Username: @Model.Username</p>
+    <p>Is Moderator: @Model.IsModerator</p>
+</div>

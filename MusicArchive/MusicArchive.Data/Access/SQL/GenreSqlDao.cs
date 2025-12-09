@@ -4,17 +4,17 @@ using MusicArchive.Data.Models;
 namespace MusicArchive.Data;
 
 public class GenreSqlDao : IGenreDao {
-    private SqliteConnection connection;
+    private readonly SqliteConnection _connection;
 
     public GenreSqlDao(SqliteConnection connection) {
-        this.connection = connection;
+        _connection = connection;
     }
 
     public List<Genre> GetGenres() {
         var result = new List<Genre>();
 
-        var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, name, approved FROM genre";
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = "SELECT id, name, description, isApproved FROM genre";
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read()) {
@@ -24,8 +24,8 @@ public class GenreSqlDao : IGenreDao {
     }
 
     public Genre GetGenre(int id) {
-        var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT id, name, approved FROM genre WHERE id = $id";
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = "SELECT id, name, description, isApproved FROM genre WHERE id = $id";
         cmd.Parameters.AddWithValue("$id", id);
 
         using var reader = cmd.ExecuteReader();
@@ -36,15 +36,16 @@ public class GenreSqlDao : IGenreDao {
     }
 
     public void AddGenre(Genre genre) {
-        var cmd = connection.CreateCommand();
+        var cmd = _connection.CreateCommand();
         cmd.CommandText = @"
-            INSERT INTO genre (name, approved)
-            VALUES ($name, $approved);
+            INSERT INTO genre (name, description, isApproved)
+            VALUES ($name, $description, $isApproved);
             SELECT last_insert_rowid();
         ";
 
         cmd.Parameters.AddWithValue("$name", genre.Name);
-        cmd.Parameters.AddWithValue("$approved", genre.Approved);
+        cmd.Parameters.AddWithValue("$description", genre.Description ?? (object)DBNull.Value);
+        cmd.Parameters.AddWithValue("$isApproved", genre.IsApproved);
 
         var result = cmd.ExecuteScalar();
         if (result != null && long.TryParse(result.ToString(), out var id)) {

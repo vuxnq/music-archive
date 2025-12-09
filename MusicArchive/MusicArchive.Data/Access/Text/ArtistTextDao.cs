@@ -4,12 +4,12 @@ using MusicArchive.Data.Models;
 namespace MusicArchive.Data;
 
 public class ArtistTextDao : IArtistDao {
-    private string filePath;
+    private readonly string filePath;
 
     public ArtistTextDao(string filePath) {
         this.filePath = filePath;
     }
-    
+
     public List<Artist> GetArtists() {
         var result = JsonSerializer.Deserialize<List<Artist>>(File.ReadAllText(filePath));
         if (result == null) throw new FileNotFoundException($"file {filePath} not found");
