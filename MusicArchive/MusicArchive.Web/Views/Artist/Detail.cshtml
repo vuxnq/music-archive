@@ -17,25 +17,24 @@
     <p>Location: @Model.Location</p>
 </div>
 
-<div>
-    <h3>Releases</h3>
-    @if (Model.Releases.Any()) {
-        <ul>
-            @foreach (var r in Model.Releases) {
-                <li>
-                    @Html.ActionLink(r.Title, "Detail", "Release", new { id = r.Id }, null)
-                    @* @(r.ReleaseDate.ToString("d")) *@
-                </li>
-            }
-        </ul>
-    } else {
-        <p>no releases</p>
-    }
-    <form asp-controller="Release" asp-action="Add" method="get">
-        <input type="hidden" name="artistsId" value="@Model.Id" />
-        <button type="submit" class="btn btn-primary">Add Release</button>
-    </form>
-</div>
+<h3>Releases</h3>
+<form asp-controller="Release" asp-action="Add" method="get">
+    <input type="hidden" name="artistsId" value="@Model.Id" />
+    <button type="submit" class="btn btn-primary">Add Release</button>
+</form>
+
+@if (Model.Releases.Any()) {
+    <ul>
+        @foreach (var r in Model.Releases) {
+            <li>
+                @Html.ActionLink(r.Title, "Detail", "Release", new { id = r.Id }, null)
+                @* @(r.ReleaseDate.ToString("d")) *@
+            </li>
+        }
+    </ul>
+} else {
+    <p>no releases</p>
+}
 
 @if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) {
     <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline">

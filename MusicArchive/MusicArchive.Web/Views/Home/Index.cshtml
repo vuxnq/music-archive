@@ -1,16 +1,42 @@
-﻿@model List<MusicArchive.Domain.Models.Artist>
+﻿@model HomeIndexDto
 
 @{
     ViewBag.Title = "Home Page";
     Layout = "_Layout";
 }
 
-<div class="artist-list">
-    <h2>Artists</h2>
-    <ul class="list-group">
-        @foreach (var artist in Model) {
-            <li class="list-group-item">
-                @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null)
+<div>
+    <div>
+        <h2>Artists</h2>
+        @Html.ActionLink("All", "Index", "Artist", null, null)
+        <ul>
+            @foreach (var artist in Model.Artists) {
+                <li>
+                    @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null)
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div>
+        <h2>Releases</h2>
+        @Html.ActionLink("All", "Index", "Release", null, null)
+        <ul>
+            @foreach (var release in Model.Releases) {
+                <li>
+                    @Html.ActionLink(release.Title, "Detail", "Release", new { id = release.Id }, null)
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div>
+    <h2>Genres</h2>
+    <ul>
+        @foreach (var genre in Model.Genres) {
+            <li>
+                @Html.ActionLink(genre.Name, "Detail", "Genre", new { id = genre.Id }, null)
             </li>
         }
     </ul>

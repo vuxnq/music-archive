@@ -6,13 +6,11 @@
 }
 
 <h2>@ViewBag.Title</h2>
+@Html.ActionLink("Propose New Genre", "Add", "Genre")
 <ul>
-@foreach (var genre in Model) {
-    <li>
-        @Html.ActionLink(genre.Name, "Detail", "Genre", new { id = genre.Id }, null)
-    </li>
-}
+    @foreach (var genre in Model) {
+        <li>
+            @Html.ActionLink(genre.Name, "Detail", "Genre", new { id = genre.Id }, null)
+        </li>
+    }
 </ul>
-<p>
-    @Html.ActionLink("Add new genre", "Add", "Genre")
-</p>

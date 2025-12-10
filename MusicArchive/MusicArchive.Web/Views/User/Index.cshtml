@@ -7,26 +7,11 @@
 
 <h2>Users</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Username</th>
-            <th>Is Moderator</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.Id</td>
-                <td>@user.Username</td>
-                <td>@user.IsModerator</td>
-                <td>
-                    @Html.ActionLink("Detail", "Detail", new { id = user.Id })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<ul>
+    @foreach (var user in Model)
+    {
+        <li>
+            @Html.ActionLink(user.Username, "Detail", new { id = user.Id })
+        </li>
+    }
+</ul>

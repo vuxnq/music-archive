@@ -6,12 +6,17 @@ using MusicArchive.Web.Models;
 namespace MusicArchive.Web.Controllers;
 
 public class HomeController(
-    IArtistService artistService
+    IArtistService artistService,
+    IReleaseService releaseService,
+    IGenreService genreService
 ) : Controller {
 
     public IActionResult Index() {
-        var artists = artistService.GetApprovedArtists();
-        return View(artists);
+        return View(new HomeIndexDto {
+            Artists = artistService.GetApprovedArtists().ToArray().Reverse().Take(5).ToList(),
+            Releases = releaseService.GetApprovedReleases().ToArray().Reverse().Take(5).ToList(),
+            Genres = genreService.GetApprovedGenres()
+        });
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -6,13 +6,11 @@
 }
 
 <h2>@ViewBag.Title</h2>
+@Html.ActionLink("Propose New Artist", "Add", "Artist")
 <ul>
-@foreach (var artist in Model) {
-    <li>
-        @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null)
-    </li>
-}
+    @foreach (var artist in Model) {
+        <li>
+            @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null)
+        </li>
+    }
 </ul>
-<p>
-    @Html.ActionLink("Add new artist", "Add", "Artist")
-</p>

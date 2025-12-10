@@ -18,15 +18,20 @@
 </div>
 
 <h3>Artist</h3>
-<p>@Model.Artist.Name</p>
+@Html.ActionLink(Model.Artist.Name, "Detail", "Artist", new { id = Model.Artist.Id }, null)
 <p>@Model.Artist.BeginDate</p>
 
 @if (Model.Genre != null) {
     <h3>Genre</h3>
-    <p>@Model.Genre.Name</p>
+    @Html.ActionLink(Model.Genre.Name, "Detail", "Genre", new { id = Model.Genre.Id }, null)
 }
 
 <h3>Tracks</h3>
+<form asp-controller="Track" asp-action="Add" method="get">
+    <input type="hidden" name="ReleaseId" value="@Model.Id" />
+    <button type="submit" class="btn btn-primary">Add Track</button>
+</form>
+
 <ul>
     @foreach (var track in Model.Tracks) {
         <li>
@@ -34,10 +39,6 @@
         </li>
     }
 </ul>
-<form asp-controller="Track" asp-action="Add" method="get">
-    <input type="hidden" name="ReleaseId" value="@Model.Id" />
-    <button type="submit" class="btn btn-primary">Add Track</button>
-</form>
 
 @if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) {
     <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline">

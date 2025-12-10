@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using MusicArchive.Data;
 using MusicArchive.Domain.Services;
 
@@ -13,11 +14,14 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddSingleton<IDataConnector, SqlConnector>();
+        // builder.Services.AddSingleton<IDataConnector, SqlConnector>();
         // builder.Services.AddSingleton<IDataConnector, TextConnector>();
 
+        GlobalConnector.SetDataSource(GlobalConnectorDataSource.Sqlite);
+        builder.Services.AddSingleton(GlobalConnector.CreateConnection());
+
         // Configure cookie authentication
-        builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options => {
                 options.LoginPath = "/User/Login";
                 options.AccessDeniedPath = "/";
