@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "Id": 0,
+    "Username": "user",
+    "Password": "user",
+    "IsModerator": false
+  },
+  {
+    "Id": 1,
+    "Username": "admin",
+    "Password": "admin",
+    "IsModerator": true
+  }
+]

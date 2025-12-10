@@ -1,5 +1,6 @@
 @{
-    ViewData["Title"] = "Login";
+    ViewBag.Title = "Login";
+    Layout = "_Layout";
 }
 
 <h2>Login</h2>
@@ -14,8 +15,13 @@
         <label for="password" class="form-label">Password</label>
         <input type="password" name="password" id="password" class="form-control" required />
     </div>
+
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+<div class="mt-3">
+    <a asp-controller="User" asp-action="Join">Don't have an account? Join here</a>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using MusicArchive.Domain.Services;
+using MusicArchive.Web.Models;
+using MusicArchive.Domain.Models;
 
 namespace MusicArchive.Web.Controllers;
 
@@ -54,5 +56,41 @@ public class UserController(
     public async Task<IActionResult> Logout() {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Index", "Home");
+    }
+
+    public IActionResult Join() {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Join(UserAddDto model) {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        if (model.Password != model.RepeatPassword) {
+            ModelState.AddModelError("RepeatPassword", "Passwords do not match");
+            return View(model);
+        }
+
+        try {
+            var existing = userService.GetUserByUsername(model.Username);
+            if (existing != null)
+            {
+                ModelState.AddModelError("Username", "Username is already taken");
+                return View(model);
+            }
+        } catch (KeyNotFoundException) {
+            // username unique - continue
+        }
+
+        var user = new User {
+            Username = model.Username,
+            Password = model.Password,
+            IsModerator = false
+        };
+        userService.AddUser(user);
+        TempData["SuccessMessage"] = "Account created successfully.";
+        return RedirectToAction("Login");
     }
 }

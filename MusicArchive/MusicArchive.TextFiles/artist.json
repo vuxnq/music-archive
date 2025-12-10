@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "Id": 0,
+    "Name": "ahoj",
+    "Description": "asdawd",
+    "BeginDate": "2025-12-10T00:00:00",
+    "EndDate": null,
+    "Location": null,
+    "IsApproved": true
+  }
+]
