@@ -15,7 +15,7 @@ public class ArtistService(IDataConnector connector) : IArtistService {
     public List<Artist> GetUnapprovedArtists() {
         return GetArtists().Where(a => !a.IsApproved).ToList();
     }
-    
+
     public List<Artist> GetApprovedArtists() {
         return GetArtists().Where(a => a.IsApproved).ToList();
     }
@@ -34,9 +34,34 @@ public class ArtistService(IDataConnector connector) : IArtistService {
         connector.BeginTransaction();
         try {
             var data = artist.ToData();
-            _artistDao.AddArtist(data);
+            _artistDao.InsertArtist(data);
             artist.Id = data.Id;
 
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void ApproveArtist(Artist artist) {
+        connector.BeginTransaction();
+        try {
+            artist.IsApproved = true;
+            var data = artist.ToData();
+            _artistDao.UpdateArtist(data);
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void RejectArtist(Artist artist) {
+        connector.BeginTransaction();
+        try {
+            _artistDao.DeleteArtist(artist.Id);
             connector.Commit();
         } catch {
             connector.Rollback();

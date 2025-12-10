@@ -22,11 +22,29 @@ public class TrackTextDao : ITrackDao {
         return result;
     }
 
-    public void AddTrack(Track track) {
+    public void InsertTrack(Track track) {
         var list = GetTracks();
         var nextId = list.Any() ? list.Max(a => a.Id) + 1 : 0;
         track.Id = nextId;
         list.Add(track);
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void UpdateTrack(Track track) {
+        var list = GetTracks();
+        var idx = list.FindIndex(a => a.Id == track.Id);
+        if (idx == -1) throw new KeyNotFoundException($"track {track.Id} not found");
+        list[idx] = track;
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void DeleteTrack(int id) {
+        var list = GetTracks();
+        var idx = list.FindIndex(a => a.Id == id);
+        if (idx == -1) throw new KeyNotFoundException($"track {id} not found");
+        list.RemoveAt(idx);
         var opts = new JsonSerializerOptions { WriteIndented = true };
         File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
     }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MusicArchive.Web.Models;
 
@@ -10,4 +11,5 @@ public class TrackAddDto {
     public int Duration { get; set; }
     [Required]
     public int ReleaseId { get; set; }
+    public List<SelectListItem> ReleaseOptions { get; set; } = [];
 }

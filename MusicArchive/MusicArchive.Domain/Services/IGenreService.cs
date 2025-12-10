@@ -8,4 +8,6 @@ public interface IGenreService {
     List<Genre> GetApprovedGenres();
     Genre GetGenre(int id);
     void AddGenre(Genre genre);
+    void ApproveGenre(Genre genre);
+    void RejectGenre(Genre genre);
 }

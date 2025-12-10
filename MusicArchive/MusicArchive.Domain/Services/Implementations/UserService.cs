@@ -23,7 +23,7 @@ public class UserService(IDataConnector connector) : IUserService {
         connector.BeginTransaction();
         try {
             var data = user.ToData();
-            _userDao.AddUser(data);
+            _userDao.InsertUser(data);
             user.Id = data.Id;
 
             connector.Commit();

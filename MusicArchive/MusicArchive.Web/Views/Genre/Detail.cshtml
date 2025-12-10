@@ -20,11 +20,7 @@
         <ul>
             @foreach (var r in Model.Releases) {
                 <li>
-                    @r.Title
-                    <div>@(r.ReleaseDate.ToString("d"))</div>
-                    @if (!string.IsNullOrEmpty(r.Description)) {
-                        <div>@r.Description</div>
-                    }
+                    @Html.ActionLink(r.Title, "Detail", "Release", new { id = r.Id }, null)
                 </li>
             }
         </ul>
@@ -32,3 +28,12 @@
         <p>no releases</p>
     }
 </div>
+
+@if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) {
+    <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline">
+        <button type="submit" class="btn btn-success">Approve</button>
+    </form>
+    <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to reject this genre?');">
+        <button type="submit" class="btn btn-danger">Reject</button>
+    </form>
+}

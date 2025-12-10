@@ -17,7 +17,6 @@ public class ArtistController(
 
     public IActionResult Detail(int id) {
         var artist = artistService.GetArtist(id);
-
         return View(artist);
     }
 
@@ -36,12 +35,34 @@ public class ArtistController(
 
         var artist = new Artist {
             Name = dto.Name,
+            Description = dto.Description,
             BeginDate = dto.BeginDate,
             EndDate = dto.EndDate,
             Location = dto.Location
         };
 
         artistService.AddArtist(artist);
+        TempData["SuccessMessage"] = "Artist submitted successfully.";
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Moderator")]
+    public IActionResult Approve(int id) {
+        var artist = artistService.GetArtist(id);
+        artistService.ApproveArtist(artist);
+        TempData["SuccessMessage"] = "Artist approved successfully.";
+        return RedirectToAction("Detail", new { id });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Moderator")]
+    public IActionResult Reject(int id) {
+        var artist = artistService.GetArtist(id);
+        artistService.RejectArtist(artist);
+        TempData["SuccessMessage"] = "Artist rejected successfully.";
         return RedirectToAction("Index");
     }
 }

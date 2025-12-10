@@ -35,7 +35,7 @@ public class GenreSqlDao : IGenreDao {
         ;
     }
 
-    public void AddGenre(Genre genre) {
+    public void InsertGenre(Genre genre) {
         var cmd = _connection.CreateCommand();
         cmd.CommandText = @"
             INSERT INTO genre (name, description, isApproved)
@@ -51,5 +51,33 @@ public class GenreSqlDao : IGenreDao {
         if (result != null && long.TryParse(result.ToString(), out var id)) {
             genre.Id = (int)id;
         }
+    }
+
+    public void UpdateGenre(Genre genre) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"
+            UPDATE genre
+            SET name = $name,
+                description = $description,
+                isApproved = $isApproved
+            WHERE id = $id;
+        ";
+
+        cmd.Parameters.AddWithValue("$id", genre.Id);
+        cmd.Parameters.AddWithValue("$name", genre.Name);
+        cmd.Parameters.AddWithValue("$description", genre.Description ?? (object)DBNull.Value);
+        cmd.Parameters.AddWithValue("$isApproved", genre.IsApproved);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"genre {genre.Id} not found");
+    }
+
+    public void DeleteGenre(int id) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"DELETE FROM genre WHERE id = $id;";
+        cmd.Parameters.AddWithValue("$id", id);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"genre {id} not found");
     }
 }

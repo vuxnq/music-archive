@@ -8,4 +8,6 @@ public interface IReleaseService {
     List<Release> GetApprovedReleases();
     Release GetRelease(int id);
     void AddRelease(Release release);
+    void ApproveRelease(Release release);
+    void RejectRelease(Release release);
 }

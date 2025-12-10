@@ -6,5 +6,7 @@ public interface IUserDao {
     List<User> GetUsers();
     User GetUser(int id);
     User GetUserByUsername(string username);
-    void AddUser(User user);
+    void InsertUser(User user);
+    void UpdateUser(User user);
+    void DeleteUser(int id);
 }

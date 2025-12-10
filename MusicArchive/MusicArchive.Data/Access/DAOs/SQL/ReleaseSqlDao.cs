@@ -34,7 +34,7 @@ public class ReleaseSqlDao : IReleaseDao {
         return new Release(reader);
     }
 
-    public void AddRelease(Release release) {
+    public void InsertRelease(Release release) {
         var cmd = _connection.CreateCommand();
 
         cmd.CommandText = @"
@@ -55,5 +55,40 @@ public class ReleaseSqlDao : IReleaseDao {
         if (result != null && long.TryParse(result.ToString(), out var id)) {
             release.Id = (int)id;
         }
+    }
+
+    public void UpdateRelease(Release release) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"
+            UPDATE ""release""
+            SET title = $title,
+                description = $description,
+                releaseDate = $releaseDate,
+                artistId = $artistId,
+                genreId = $genreId,
+                isApproved = $isApproved
+            WHERE id = $id;
+        ";
+
+        cmd.Parameters.AddWithValue("$id", release.Id);
+        cmd.Parameters.AddWithValue("$title", release.Title);
+        cmd.Parameters.AddWithValue("$description", release.Description ?? (object)DBNull.Value);
+        cmd.Parameters.AddWithValue("$releaseDate", release.ReleaseDate);
+        cmd.Parameters.AddWithValue("$artistId", release.ArtistsId);
+        if (release.GenreId.HasValue) cmd.Parameters.AddWithValue("$genreId", release.GenreId.Value);
+        else cmd.Parameters.AddWithValue("$genreId", DBNull.Value);
+        cmd.Parameters.AddWithValue("$isApproved", release.IsApproved);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"release {release.Id} not found");
+    }
+
+    public void DeleteRelease(int id) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"DELETE FROM ""release"" WHERE id = $id;";
+        cmd.Parameters.AddWithValue("$id", id);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"release {id} not found");
     }
 }

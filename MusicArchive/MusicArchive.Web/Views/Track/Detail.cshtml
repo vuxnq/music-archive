@@ -18,5 +18,16 @@
 
 @if (Model.Release != null) {
     <h3>Release</h3>
-    <p>@Model.Release.Title</p>
+    <p>
+        @Html.ActionLink(Model.Release.Title, "Detail", "Release", new { id = Model.Release.Id }, null)
+    </p>
+}
+
+@if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) {
+    <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline">
+        <button type="submit" class="btn btn-success">Approve</button>
+    </form>
+    <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to reject this track?');">
+        <button type="submit" class="btn btn-danger">Reject</button>
+    </form>
 }

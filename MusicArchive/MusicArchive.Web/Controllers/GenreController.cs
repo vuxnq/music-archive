@@ -15,6 +15,11 @@ public class GenreController(
         return View(genres);
     }
 
+    public IActionResult Detail(int id) {
+        var genre = genreService.GetGenre(id);
+        return View(genre);
+    }
+
     [Authorize]
     public IActionResult Add() {
         return View(new GenreAddDto());
@@ -29,16 +34,32 @@ public class GenreController(
         }
 
         var genre = new Genre {
-            Name = dto.Name
+            Name = dto.Name,
+            Description = dto.Description,
         };
 
         genreService.AddGenre(genre);
+        TempData["SuccessMessage"] = "Genre submitted successfully.";
         return RedirectToAction("Index");
     }
 
-    public IActionResult Detail(int id) {
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Moderator")]
+    public IActionResult Approve(int id) {
         var genre = genreService.GetGenre(id);
+        genreService.ApproveGenre(genre);
+        TempData["SuccessMessage"] = "Genre approved successfully.";
+        return RedirectToAction("Detail", new { id });
+    }
 
-        return View(genre);
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Moderator")]
+    public IActionResult Reject(int id) {
+        var genre = genreService.GetGenre(id);
+        genreService.RejectGenre(genre);
+        TempData["SuccessMessage"] = "Genre rejected successfully.";
+        return RedirectToAction("Index");
     }
 }

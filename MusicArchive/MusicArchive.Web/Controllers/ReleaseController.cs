@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MusicArchive.Domain.Services;
 using MusicArchive.Domain.Models;
 using MusicArchive.Web.Models;
@@ -7,7 +8,9 @@ using MusicArchive.Web.Models;
 namespace MusicArchive.Web.Controllers;
 
 public class ReleaseController(
-    IReleaseService releaseService
+    IReleaseService releaseService,
+    IArtistService artistService,
+    IGenreService genreService
 ) : Controller {
 
     public IActionResult Index() {
@@ -15,9 +18,21 @@ public class ReleaseController(
         return View(releases);
     }
 
+    public IActionResult Detail(int id) {
+        var release = releaseService.GetRelease(id);
+
+        return View(release);
+    }
+
     [Authorize]
-    public IActionResult Add() {
-        return View(new ReleaseAddDto { ReleaseDate = DateTime.Now.Date });
+    public IActionResult Add(int? artistsId = null) {
+        var dto = new ReleaseAddDto {
+            ReleaseDate = DateTime.Now.Date,
+            ArtistId = artistsId ?? 0,
+            ArtistOptions = artistService.GetApprovedArtists().Select(a => new SelectListItem(a.Name, a.Id.ToString())).ToList(),
+            GenreOptions = genreService.GetApprovedGenres().Select(g => new SelectListItem(g.Name, g.Id.ToString())).ToList(),
+        };
+        return View(dto);
     }
 
     [HttpPost]
@@ -25,6 +40,8 @@ public class ReleaseController(
     [Authorize]
     public IActionResult Add(ReleaseAddDto dto) {
         if (!ModelState.IsValid) {
+            dto.ArtistOptions = artistService.GetApprovedArtists().Select(a => new SelectListItem(a.Name, a.Id.ToString())).ToList();
+            dto.GenreOptions = genreService.GetApprovedGenres().Select(g => new SelectListItem(g.Name, g.Id.ToString())).ToList();
             return View(dto);
         }
 
@@ -32,22 +49,36 @@ public class ReleaseController(
             Title = dto.Title,
             Description = dto.Description,
             ReleaseDate = dto.ReleaseDate,
-            ArtistsId = dto.ArtistsId,
+            ArtistsId = dto.ArtistId,
             GenreId = dto.GenreId,
             Tracks = dto.Tracks?.Select(t => new Track {
                 Title = t.Title,
                 Duration = t.Duration
-            }).ToList() ?? new List<Track>()
+            }).ToList() ?? []
         };
 
         releaseService.AddRelease(release);
-
+        TempData["SuccessMessage"] = "Release submitted successfully.";
         return RedirectToAction("Index");
     }
 
-    public IActionResult Detail(int id) {
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Moderator")]
+    public IActionResult Approve(int id) {
         var release = releaseService.GetRelease(id);
+        releaseService.ApproveRelease(release);
+        TempData["SuccessMessage"] = "Release approved successfully.";
+        return RedirectToAction("Detail", new { id });
+    }
 
-        return View(release);
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Moderator")]
+    public IActionResult Reject(int id) {
+        var release = releaseService.GetRelease(id);
+        releaseService.RejectRelease(release);
+        TempData["SuccessMessage"] = "Release rejected successfully.";
+        return RedirectToAction("Index");
     }
 }

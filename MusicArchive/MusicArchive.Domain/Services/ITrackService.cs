@@ -8,4 +8,6 @@ public interface ITrackService {
     List<Track> GetApprovedTracks();
     Track GetTrack(int id);
     void AddTrack(Track track);
+    void ApproveTrack(Track track);
+    void RejectTrack(Track track);
 }

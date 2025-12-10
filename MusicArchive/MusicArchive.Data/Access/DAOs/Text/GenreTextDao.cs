@@ -22,11 +22,29 @@ public class GenreTextDao : IGenreDao {
         return result;
     }
 
-    public void AddGenre(Genre genre) {
+    public void InsertGenre(Genre genre) {
         var list = GetGenres();
         var nextId = list.Any() ? list.Max(a => a.Id) + 1 : 0;
         genre.Id = nextId;
         list.Add(genre);
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void UpdateGenre(Genre genre) {
+        var list = GetGenres();
+        var idx = list.FindIndex(a => a.Id == genre.Id);
+        if (idx == -1) throw new KeyNotFoundException($"genre {genre.Id} not found");
+        list[idx] = genre;
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void DeleteGenre(int id) {
+        var list = GetGenres();
+        var idx = list.FindIndex(a => a.Id == id);
+        if (idx == -1) throw new KeyNotFoundException($"genre {id} not found");
+        list.RemoveAt(idx);
         var opts = new JsonSerializerOptions { WriteIndented = true };
         File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
     }

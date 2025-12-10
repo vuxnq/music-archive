@@ -22,12 +22,16 @@
         <input type="date" id="ReleaseDate" name="ReleaseDate" value="@(Model?.ReleaseDate.ToString("yyyy-MM-dd") ?? string.Empty)" required />
     </div>
     <div>
-        <label for="ArtistsId">Artist Id</label>
-        <input type="number" id="ArtistsId" name="ArtistsId" value="@(Model?.ArtistsId.ToString() ?? string.Empty)" required />
+        <label for="ArtistId">Artist</label>
+        <select id="ArtistId" asp-for="ArtistId" asp-items="Model.ArtistOptions" required="required">
+            <option value="" selected="selected" disabled="disabled">Select Artist</option>
+        </select>
     </div>
     <div>
-        <label for="GenreId">Genre Id</label>
-        <input type="number" id="GenreId" name="GenreId" value="@(Model?.GenreId.HasValue ?? false ? Model.GenreId.Value.ToString() : string.Empty)" />
+        <label for="GenreId">Genre</label>
+        <select id="GenreId" asp-for="GenreId" asp-items="Model.GenreOptions">
+            <option value="" selected="selected">-</option>
+        </select>
     </div>
 
     <h3>Tracks</h3>

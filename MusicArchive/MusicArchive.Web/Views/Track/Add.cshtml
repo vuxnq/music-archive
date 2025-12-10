@@ -23,7 +23,9 @@
     </div>
     <div>
         <label for="ReleaseId">Release Id</label>
-        <input type="number" id="ReleaseId" name="ReleaseId" value="@(Model?.ReleaseId.ToString() ?? string.Empty)" required />
+        <select id="ReleaseId" asp-for="ReleaseId" asp-items="Model.ReleaseOptions" required="required">
+            <option value="" selected="selected" disabled="disabled">Select Release</option>
+        </select>
     </div>
     <div>
         <button type="submit">Add Track</button>

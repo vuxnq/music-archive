@@ -28,11 +28,29 @@ public class UserTextDao : IUserDao {
         return result;
     }
 
-    public void AddUser(User user) {
+    public void InsertUser(User user) {
         var list = GetUsers();
         var nextId = list.Any() ? list.Max(a => a.Id) + 1 : 0;
         user.Id = nextId;
         list.Add(user);
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void UpdateUser(User user) {
+        var list = GetUsers();
+        var idx = list.FindIndex(a => a.Id == user.Id);
+        if (idx == -1) throw new KeyNotFoundException($"user {user.Id} not found");
+        list[idx] = user;
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void DeleteUser(int id) {
+        var list = GetUsers();
+        var idx = list.FindIndex(a => a.Id == id);
+        if (idx == -1) throw new KeyNotFoundException($"user {id} not found");
+        list.RemoveAt(idx);
         var opts = new JsonSerializerOptions { WriteIndented = true };
         File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
     }

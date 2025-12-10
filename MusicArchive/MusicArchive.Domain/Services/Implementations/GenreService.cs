@@ -15,7 +15,7 @@ public class GenreService(IDataConnector connector) : IGenreService {
     public List<Genre> GetUnapprovedGenres() {
         return GetGenres().Where(g => !g.IsApproved).ToList();
     }
-    
+
     public List<Genre> GetApprovedGenres() {
         return GetGenres().Where(g => g.IsApproved).ToList();
     }
@@ -34,9 +34,34 @@ public class GenreService(IDataConnector connector) : IGenreService {
         connector.BeginTransaction();
         try {
             var data = genre.ToData();
-            _genreDao.AddGenre(data);
+            _genreDao.InsertGenre(data);
             genre.Id = data.Id;
 
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void ApproveGenre(Genre genre) {
+        connector.BeginTransaction();
+        try {
+            genre.IsApproved = true;
+            var data = genre.ToData();
+            _genreDao.UpdateGenre(data);
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void RejectGenre(Genre genre) {
+        connector.BeginTransaction();
+        try {
+            _genreDao.DeleteGenre(genre.Id);
             connector.Commit();
         } catch {
             connector.Rollback();

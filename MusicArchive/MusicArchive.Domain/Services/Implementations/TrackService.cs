@@ -15,7 +15,7 @@ public class TrackService(IDataConnector connector) : ITrackService {
     public List<Track> GetUnapprovedTracks() {
         return GetTracks().Where(r => !r.IsApproved).ToList();
     }
-    
+
     public List<Track> GetApprovedTracks() {
         return GetTracks().Where(r => r.IsApproved).ToList();
     }
@@ -27,8 +27,41 @@ public class TrackService(IDataConnector connector) : ITrackService {
     }
 
     public void AddTrack(Track track) {
-        var data = track.ToData();
-        _trackDao.AddTrack(data);
-        track.Id = data.Id;
+        connector.BeginTransaction();
+        try {
+            var data = track.ToData();
+            _trackDao.InsertTrack(data);
+            track.Id = data.Id;
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void ApproveTrack(Track track) {
+        connector.BeginTransaction();
+        try {
+            track.IsApproved = true;
+            var data = track.ToData();
+            _trackDao.UpdateTrack(data);
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void RejectTrack(Track track) {
+        connector.BeginTransaction();
+        try {
+            _trackDao.DeleteTrack(track.Id);
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
     }
 }

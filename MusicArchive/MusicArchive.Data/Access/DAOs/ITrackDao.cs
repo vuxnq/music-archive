@@ -5,5 +5,7 @@ namespace MusicArchive.Data;
 public interface ITrackDao {
     List<Track> GetTracks();
     Track GetTrack(int id);
-    void AddTrack(Track track);
+    void InsertTrack(Track track);
+    void UpdateTrack(Track track);
+    void DeleteTrack(int id);
 }

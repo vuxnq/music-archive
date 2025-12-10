@@ -5,5 +5,7 @@ namespace MusicArchive.Data;
 public interface IGenreDao {
     List<Genre> GetGenres();
     Genre GetGenre(int id);
-    void AddGenre(Genre genre);
+    void InsertGenre(Genre genre);
+    void UpdateGenre(Genre genre);
+    void DeleteGenre(int id);
 }

@@ -8,4 +8,6 @@ public interface IArtistService {
     List<Artist> GetApprovedArtists();
     Artist GetArtist(int id);
     void AddArtist(Artist artist);
+    void ApproveArtist(Artist artist);
+    void RejectArtist(Artist artist);
 }

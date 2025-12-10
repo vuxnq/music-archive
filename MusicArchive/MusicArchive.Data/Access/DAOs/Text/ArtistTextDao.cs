@@ -22,11 +22,29 @@ public class ArtistTextDao : IArtistDao {
         return result;
     }
 
-    public void AddArtist(Artist artist) {
+    public void InsertArtist(Artist artist) {
         var list = GetArtists();
         var nextId = list.Any() ? list.Max(a => a.Id) + 1 : 0;
         artist.Id = nextId;
         list.Add(artist);
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void UpdateArtist(Artist artist) {
+        var list = GetArtists();
+        var idx = list.FindIndex(a => a.Id == artist.Id);
+        if (idx == -1) throw new KeyNotFoundException($"artist {artist.Id} not found");
+        list[idx] = artist;
+        var opts = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
+    }
+
+    public void DeleteArtist(int id) {
+        var list = GetArtists();
+        var idx = list.FindIndex(a => a.Id == id);
+        if (idx == -1) throw new KeyNotFoundException($"artist {id} not found");
+        list.RemoveAt(idx);
         var opts = new JsonSerializerOptions { WriteIndented = true };
         File.WriteAllText(filePath, JsonSerializer.Serialize(list, opts));
     }

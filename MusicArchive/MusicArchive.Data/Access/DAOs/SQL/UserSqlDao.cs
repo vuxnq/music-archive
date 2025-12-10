@@ -45,7 +45,7 @@ public class UserSqlDao : IUserDao {
         return new User(reader);
     }
 
-    public void AddUser(User user) {
+    public void InsertUser(User user) {
         var cmd = _connection.CreateCommand();
         cmd.CommandText = @"
             INSERT INTO user (username, password)
@@ -60,5 +60,33 @@ public class UserSqlDao : IUserDao {
         if (result != null && long.TryParse(result.ToString(), out var id)) {
             user.Id = (int)id;
         }
+    }
+
+    public void UpdateUser(User user) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"
+            UPDATE user
+            SET username = $username,
+                password = $password,
+                isModerator = $isModerator
+            WHERE id = $id;
+        ";
+
+        cmd.Parameters.AddWithValue("$id", user.Id);
+        cmd.Parameters.AddWithValue("$username", user.Username);
+        cmd.Parameters.AddWithValue("$password", user.Password);
+        cmd.Parameters.AddWithValue("$isModerator", user.IsModerator);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"user {user.Id} not found");
+    }
+
+    public void DeleteUser(int id) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"DELETE FROM user WHERE id = $id;";
+        cmd.Parameters.AddWithValue("$id", id);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"user {id} not found");
     }
 }

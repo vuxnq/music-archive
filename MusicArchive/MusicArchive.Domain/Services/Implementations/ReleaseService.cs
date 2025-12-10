@@ -17,7 +17,7 @@ public class ReleaseService(IDataConnector connector) : IReleaseService {
     public List<Release> GetUnapprovedReleases() {
         return GetReleases().Where(r => !r.IsApproved).ToList();
     }
-    
+
     public List<Release> GetApprovedReleases() {
         return GetReleases().Where(r => r.IsApproved).ToList();
     }
@@ -40,15 +40,51 @@ public class ReleaseService(IDataConnector connector) : IReleaseService {
         connector.BeginTransaction();
         try {
             var data = release.ToData();
-            _releaseDao.AddRelease(data);
+            _releaseDao.InsertRelease(data);
             release.Id = data.Id;
 
             foreach (var track in release.Tracks) {
                 var tdata = track.ToData();
                 tdata.ReleaseId = release.Id;
-                _trackDao.AddTrack(tdata);
+                _trackDao.InsertTrack(tdata);
                 track.Id = tdata.Id;
             }
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void ApproveRelease(Release release) {
+        connector.BeginTransaction();
+        try {
+            release.IsApproved = true;
+            var data = release.ToData();
+            _releaseDao.UpdateRelease(data);
+
+            foreach (var track in release.Tracks) {
+                track.IsApproved = true;
+                var tdata = track.ToData();
+                _trackDao.UpdateTrack(tdata);
+            }
+
+            connector.Commit();
+        } catch {
+            connector.Rollback();
+            throw;
+        }
+    }
+
+    public void RejectRelease(Release release) {
+        connector.BeginTransaction();
+        try {
+            foreach (var track in release.Tracks) {
+                _trackDao.DeleteTrack(track.Id);
+            }
+
+            _releaseDao.DeleteRelease(release.Id);
 
             connector.Commit();
         } catch {

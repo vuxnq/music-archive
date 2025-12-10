@@ -34,7 +34,7 @@ public class ArtistSqlDao : IArtistDao {
         return new Artist(reader);
     }
 
-    public void AddArtist(Artist artist) {
+    public void InsertArtist(Artist artist) {
         var cmd = _connection.CreateCommand();
         cmd.CommandText = @"
             INSERT INTO artist (name, description, beginDate, endDate, location, isApproved)
@@ -56,5 +56,40 @@ public class ArtistSqlDao : IArtistDao {
         if (result != null && long.TryParse(result.ToString(), out var id)) {
             artist.Id = (int)id;
         }
+    }
+
+    public void UpdateArtist(Artist artist) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"
+            UPDATE artist
+            SET name = $name,
+                description = $description,
+                beginDate = $beginDate,
+                endDate = $endDate,
+                location = $location,
+                isApproved = $isApproved
+            WHERE id = $id;
+        ";
+
+        cmd.Parameters.AddWithValue("$id", artist.Id);
+        cmd.Parameters.AddWithValue("$name", artist.Name);
+        cmd.Parameters.AddWithValue("$description", artist.Description ?? (object)DBNull.Value);
+        cmd.Parameters.AddWithValue("$beginDate", artist.BeginDate);
+        if (artist.EndDate.HasValue) cmd.Parameters.AddWithValue("$endDate", artist.EndDate.Value);
+        else cmd.Parameters.AddWithValue("$endDate", DBNull.Value);
+        cmd.Parameters.AddWithValue("$location", artist.Location ?? (object)DBNull.Value);
+        cmd.Parameters.AddWithValue("$isApproved", artist.IsApproved);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"artist {artist.Id} not found");
+    }
+
+    public void DeleteArtist(int id) {
+        var cmd = _connection.CreateCommand();
+        cmd.CommandText = @"DELETE FROM artist WHERE id = $id;";
+        cmd.Parameters.AddWithValue("$id", id);
+
+        int affected = cmd.ExecuteNonQuery();
+        if (affected == 0) throw new KeyNotFoundException($"artist {id} not found");
     }
 }
