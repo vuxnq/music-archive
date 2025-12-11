@@ -5,12 +5,30 @@
     Layout = "_Layout";
 }
 
-<h2>@ViewBag.Title</h2>
-@Html.ActionLink("Propose New Release", "Add", "Release")
-<ul>
+@* <h2>@ViewBag.Title</h2> *@
+@* @Html.ActionLink("Propose New Release", "Add", "Release") *@
+@* <ul> *@
+@*     @foreach (var release in Model) { *@
+@*         <li> *@
+@*             @Html.ActionLink(release.Title, "Detail", "Release", new { id = release.Id }, null) *@
+@*         </li> *@
+@*     } *@
+@* </ul> *@
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Releases</h2>
+</div>
+
+<ul class="list-unstyled d-flex justify-content-center flex-wrap gap-4">
     @foreach (var release in Model) {
-        <li>
-            @Html.ActionLink(release.Title, "Detail", "Release", new { id = release.Id }, null)
+        <li class="mb-3" style="width: 150px;">
+            <a href="@Url.Action("Detail", "Release", new { id = release.Id })" class="text-decoration-none text-dark">
+                <img src="https://dummyimage.com/150/000/ffffff?text=@(release.Title)"
+                     class="rounded mb-2 shadow-sm"
+                     alt="@release.Title">
+                <div class="fw-bold text-truncate">@release.Title</div>
+            </a>
         </li>
     }
 </ul>

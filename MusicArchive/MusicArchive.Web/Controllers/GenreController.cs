@@ -16,7 +16,7 @@ public class GenreController(
     }
 
     public IActionResult Detail(int id) {
-        var genre = genreService.GetGenre(id);
+        var genre = genreService.GetGenre(id, User.IsInRole("Moderator"));
         return View(genre);
     }
 
@@ -40,14 +40,14 @@ public class GenreController(
 
         genreService.AddGenre(genre);
         TempData["SuccessMessage"] = "Genre submitted successfully.";
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Moderator")]
     public IActionResult Approve(int id) {
-        var genre = genreService.GetGenre(id);
+        var genre = genreService.GetGenre(id, User.IsInRole("Moderator"));
         genreService.ApproveGenre(genre);
         TempData["SuccessMessage"] = "Genre approved successfully.";
         return RedirectToAction("Detail", new { id });
@@ -57,7 +57,7 @@ public class GenreController(
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Moderator")]
     public IActionResult Reject(int id) {
-        var genre = genreService.GetGenre(id);
+        var genre = genreService.GetGenre(id, User.IsInRole("Moderator"));
         genreService.RejectGenre(genre);
         TempData["SuccessMessage"] = "Genre rejected successfully.";
         return RedirectToAction("Index");

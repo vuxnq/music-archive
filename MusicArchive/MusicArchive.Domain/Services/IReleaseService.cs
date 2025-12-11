@@ -6,7 +6,7 @@ public interface IReleaseService {
     List<Release> GetReleases();
     List<Release> GetUnapprovedReleases();
     List<Release> GetApprovedReleases();
-    Release GetRelease(int id);
+    Release GetRelease(int id, bool includeUnapproved = false);
     void AddRelease(Release release);
     void ApproveRelease(Release release);
     void RejectRelease(Release release);

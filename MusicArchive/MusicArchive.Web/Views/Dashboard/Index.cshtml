@@ -5,44 +5,125 @@
     Layout = "_Layout";
 }
 
-<h2>@ViewBag.Title</h2>
+@* <h2>@ViewBag.Title</h2> *@
+@* *@
+@* <div> *@
+@*     <h3>Artist Submissions</h3> *@
+@*     <ul> *@
+@*         @foreach (var artist in Model.Artists) { *@
+@*             <li> *@
+@*                 @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null) *@
+@*             </li> *@
+@*         } *@
+@*     </ul> *@
+@* *@
+@*     <h3>Release Submissions</h3> *@
+@*     <ul> *@
+@*         @foreach (var release in Model.Releases) { *@
+@*             <li> *@
+@*                 @Html.ActionLink(release.Title, "Detail", "Release", new { id = release.Id }, null) *@
+@*             </li> *@
+@*         } *@
+@*     </ul> *@
+@* *@
+@*     <h3>Track Submissions</h3> *@
+@*     <ul> *@
+@*         @foreach (var track in Model.Tracks) { *@
+@*             <li> *@
+@*                 @Html.ActionLink(track.Title, "Detail", "Track", new { id = track.Id }, null) *@
+@*             </li> *@
+@*         } *@
+@*     </ul> *@
+@* </div> *@
+@* *@
+@* <div> *@
+@*     <h3>Genre Submissions</h3> *@
+@*     <ul> *@
+@*         @foreach (var genre in Model.Genres) { *@
+@*             <li> *@
+@*                 @Html.ActionLink(genre.Name, "Detail", "Genre", new { id = genre.Id }, null) *@
+@*             </li> *@
+@*         } *@
+@*     </ul> *@
+@* </div> *@
 
-<div>
-    <h3>Artist Submissions</h3>
-    <ul>
-        @foreach (var artist in Model.Artists) {
-            <li>
-                @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null)
-            </li>
-        }
-    </ul>
 
-    <h3>Release Submissions</h3>
-    <ul>
-        @foreach (var release in Model.Releases) {
-            <li>
-                @Html.ActionLink(release.Title, "Detail", "Release", new { id = release.Id }, null)
-            </li>
-        }
-    </ul>
+<div class="row">
+    <div class="col-10">
 
-    <h3>Track Submissions</h3>
-    <ul>
-        @foreach (var track in Model.Tracks) {
-            <li>
-                @Html.ActionLink(track.Title, "Detail", "Track", new { id = track.Id }, null)
-            </li>
-        }
-    </ul>
-</div>
+        <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Artists</h2>
+            </div>
 
-<div>
-    <h3>Genre Submissions</h3>
-    <ul>
-        @foreach (var genre in Model.Genres) {
-            <li>
-                @Html.ActionLink(genre.Name, "Detail", "Genre", new { id = genre.Id }, null)
-            </li>
-        }
-    </ul>
+            <ul class="list-unstyled d-flex flex-wrap gap-4">
+                @foreach (var artist in Model.Artists) {
+                    <li class="text-center" style="width: 150px;">
+                        <a href="@Url.Action("Detail", "Artist", new { id = artist.Id })" class="text-decoration-none text-dark">
+                            <img src="https://dummyimage.com/150/000/ffffff?text=@(artist.Name)"
+                                 class="rounded-circle mb-2 shadow-sm"
+                                 alt="@artist.Name">
+                            <div class="fw-bold">@artist.Name</div>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <hr />
+
+        <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Releases</h2>
+            </div>
+
+            <ul class="list-unstyled d-flex flex-wrap gap-4">
+                @foreach (var release in Model.Releases) {
+                    <li class="mb-3" style="width: 150px;">
+                        <a href="@Url.Action("Detail", "Release", new { id = release.Id })" class="text-decoration-none text-dark">
+                            <img src="https://dummyimage.com/150/000/ffffff?text=@(release.Title)"
+                                 class="rounded mb-2 shadow-sm"
+                                 alt="@release.Title">
+                            <div class="fw-bold text-truncate">@release.Title</div>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <hr />
+
+        @* TODO: after release page is done move tracks component here *@
+        <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Tracks</h2>
+            </div>
+
+            <ul class="list-unstyled d-flex flex-wrap gap-4">
+                @foreach (var track in Model.Tracks) {
+                    <li class="mb-3" style="width: 150px;">
+                        <a href="@Url.Action("Detail", "Track", new { id = track.Id })" class="text-decoration-none text-dark">
+                            <img src="https://dummyimage.com/150/000/ffffff?text=@(track.Title)"
+                                 class="rounded mb-2 shadow-sm"
+                                 alt="@track.Title">
+                            <div class="fw-bold text-truncate">@track.Title</div>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-2 border-start">
+        <div class="ps-3">
+            <h2 class="mb-3">Genres</h2>
+            <ul class="list-group list-group-flush">
+                @foreach (var genre in Model.Genres) {
+                    <li class="list-group-item border-0 px-0">
+                        @Html.ActionLink(genre.Name, "Detail", "Genre", new { id = genre.Id }, new { @class = "text-decoration-none text-secondary" })
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
 </div>

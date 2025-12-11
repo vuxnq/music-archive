@@ -50,7 +50,7 @@ public class TrackController(
 
         trackService.AddTrack(track);
         TempData["SuccessMessage"] = "Track submitted successfully.";
-        return RedirectToAction("Index");
+        return RedirectToAction("Detail", "Release", new {id = dto.ReleaseId});
     }
 
     [HttpPost]

@@ -4,43 +4,166 @@
     ViewBag.Title = Model.Name;
     Layout = "_Layout";
 }
+@* *@
+@* <h2>@ViewBag.Title</h2> *@
+@* *@
+@* <div> *@
+@*     <h3>details</h3> *@
+@*     <p>Id: @Model.Id</p> *@
+@*     <p>Name: @Model.Name</p> *@
+@*     <p>Description: @Model.Description</p> *@
+@*     <p>Begin date: @Model.BeginDate.ToString("d")</p> *@
+@*     <p>End date: @(Model.EndDate?.ToString("d") ?? "")</p> *@
+@*     <p>Location: @Model.Location</p> *@
+@* </div> *@
+@* *@
+@* <h3>Releases</h3> *@
+@* <form asp-controller="Release" asp-action="Add" method="get"> *@
+@*     <input type="hidden" name="artistsId" value="@Model.Id" /> *@
+@*     <button type="submit" class="btn btn-primary">Add Release</button> *@
+@* </form> *@
+@* *@
+@* @if (Model.Releases.Any()) { *@
+@*     <ul> *@
+@*         @foreach (var r in Model.Releases) { *@
+@*             <li> *@
+@*                 @Html.ActionLink(r.Title, "Detail", "Release", new { id = r.Id }, null) *@
+@*                 $1$ @(r.ReleaseDate.ToString("d")) #1# *@
+@*             </li> *@
+@*         } *@
+@*     </ul> *@
+@* } else { *@
+@*     <p>no releases</p> *@
+@* } *@
+@* *@
+@* @if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) { *@
+@*     <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline"> *@
+@*         <button type="submit" class="btn btn-success">Approve</button> *@
+@*     </form> *@
+@*     <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to reject this artist?');"> *@
+@*         <button type="submit" class="btn btn-danger">Reject</button> *@
+@*     </form> *@
+@* } *@
 
-<h2>@ViewBag.Title</h2>
 
-<div>
-    <h3>details</h3>
-    <p>Id: @Model.Id</p>
-    <p>Name: @Model.Name</p>
-    <p>Description: @Model.Description</p>
-    <p>Begin date: @Model.BeginDate.ToString("d")</p>
-    <p>End date: @(Model.EndDate?.ToString("d") ?? "")</p>
-    <p>Location: @Model.Location</p>
+<div class="container mt-4">
+    <div class="row mb-5">
+        <div class="col-md-4 text-center">
+            <img src="https://dummyimage.com/400/000/ffffff?text=@(Model.Name)"
+                 class="img-fluid rounded-circle shadow-sm"
+                 alt="@Model.Name"
+                 style="width: 300px; height: 300px; object-fit: cover;">
+        </div>
+
+        <div class="col-md-8 d-flex flex-column justify-content-center">
+            <h1 class="display-4 fw-bold mb-2">@Model.Name</h1>
+
+            <div class="d-flex gap-3 mb-4 text-muted text-uppercase small fw-bold">
+                <span>
+                    Formed: @Model.BeginDate.ToString("d")
+                </span>
+                @if (Model.EndDate.HasValue)
+                {
+                    <span class="border-start ps-3">
+                        Ended: @Model.EndDate.Value.ToString("d")
+                    </span>
+                }
+                @if (Model.Location != null)
+                {
+                    <span class="border-start ps-3">
+                        Location: @Model.Location
+                    </span>
+                }
+            </div>
+
+            <div class="p-4 bg-light rounded border mb-4">
+                <h5 class="text-uppercase text-muted fs-6 fw-bold">Biography</h5>
+                <p class="mb-0 text-secondary">
+                    @(string.IsNullOrEmpty(Model.Description) ? "No biography available for this artist yet." : Model.Description)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <div class="row">
+        <div class="col-7">
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">Discography</h3>
+                <a href="@Url.Action("Add", "Release", new { artistId = Model.Id })" class="btn btn-sm btn-outline-primary">
+                    + Add Release
+                </a>
+            </div>
+
+            @if (Model.Releases != null && Model.Releases.Any()) {
+                <ul class="list-unstyled d-flex flex-wrap gap-4">
+                    @foreach (var release in Model.Releases) {
+                        <li class="mb-3" style="width: 150px;">
+                            <a href="@Url.Action("Detail", "Release", new { id = release.Id })" class="text-decoration-none text-dark">
+                                <img src="https://dummyimage.com/150/@(!release.IsApproved ? "f00" : "000")/ffffff?text=@(release.Title)"
+                                     class="rounded mb-2 shadow-sm"
+                                     alt="@release.Title">
+                                <div class="fw-bold text-truncate">@release.Title</div>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            } else {
+                <div class="alert alert-light border text-center py-5">
+                    <p class="text-muted mb-0">No releases found for this artist.</p>
+                </div>
+            }
+        </div>
+
+        @if (Model.IsApproved) {
+            <div class="col-5">
+                <h3 class="">Comments</h3>
+
+                <div class="card mb-4  border-0">
+                    <div class="">
+                        <div class="form-group mb-2">
+                            <textarea class="form-control" rows="3" placeholder="Join the discussion..." disabled></textarea>
+                        </div>
+                        <button class="btn btn-primary disabled">Post Comment</button>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-3">
+                    <img src="https://dummyimage.com/50/000/ffffff?text=C" class="rounded-circle me-3" width="50" height="50">
+                    <div>
+                        <h6 class="fw-bold mb-1">Cameron Winter</h6>
+                        <p class="text-muted small mb-1">2 days ago</p>
+                        <p class="mb-0">God is real, God is real, I’m not kidding, God is actually real, I'm not kidding this time, I think God is actually for real, God is real, God is actually real, God is real, I wouldn’t joke about this, I'm not kidding this time</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-3">
+                    <img src="https://dummyimage.com/50/000/ffffff?text=h" class="rounded-circle me-3" width="50" height="50">
+                    <div>
+                        <h6 class="fw-bold mb-1">headache</h6>
+                        <p class="text-muted small mb-1">5 days ago</p>
+                        <p class="mb-0">All I've ever wanted was to move to the music. To be at a party that never ended. They used to chase me with hammers down the street. Boo-hoo, right? But I'm okay</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
-<h3>Releases</h3>
-<form asp-controller="Release" asp-action="Add" method="get">
-    <input type="hidden" name="artistsId" value="@Model.Id" />
-    <button type="submit" class="btn btn-primary">Add Release</button>
-</form>
 
-@if (Model.Releases.Any()) {
-    <ul>
-        @foreach (var r in Model.Releases) {
-            <li>
-                @Html.ActionLink(r.Title, "Detail", "Release", new { id = r.Id }, null)
-                @* @(r.ReleaseDate.ToString("d")) *@
-            </li>
-        }
-    </ul>
-} else {
-    <p>no releases</p>
-}
+@if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator"))
+{
+    <div class="position-fixed bottom-0 end-0 m-4" style="z-index: 1050;">
+        <div class="bg-white shadow-lg border rounded-pill py-2 px-3 d-flex align-items-center gap-2">
 
-@if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) {
-    <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline">
-        <button type="submit" class="btn btn-success">Approve</button>
-    </form>
-    <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to reject this artist?');">
-        <button type="submit" class="btn btn-danger">Reject</button>
-    </form>
+            <form asp-action="Reject" asp-route-id="@Model.Id" method="post" class="d-flex" onsubmit="return confirm('Are you sure?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 border-0"><h3 class="m-0">Reject</h3></button>
+            </form>
+
+            <form asp-action="Approve" asp-route-id="@Model.Id" method="post" class="d-flex">
+                <button type="submit" class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm"><h3 class="m-0">Approve</h3></button>
+            </form>
+        </div>
+    </div>
 }

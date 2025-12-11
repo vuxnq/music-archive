@@ -19,16 +19,16 @@ public class ReleaseController(
     }
 
     public IActionResult Detail(int id) {
-        var release = releaseService.GetRelease(id);
+        var release = releaseService.GetRelease(id, User.IsInRole("Moderator"));
 
         return View(release);
     }
 
     [Authorize]
-    public IActionResult Add(int? artistsId = null) {
+    public IActionResult Add(int? artistId = null) {
         var dto = new ReleaseAddDto {
             ReleaseDate = DateTime.Now.Date,
-            ArtistId = artistsId ?? 0,
+            ArtistId = artistId ?? 0,
             ArtistOptions = artistService.GetApprovedArtists().Select(a => new SelectListItem(a.Name, a.Id.ToString())).ToList(),
             GenreOptions = genreService.GetApprovedGenres().Select(g => new SelectListItem(g.Name, g.Id.ToString())).ToList(),
         };
@@ -66,7 +66,7 @@ public class ReleaseController(
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Moderator")]
     public IActionResult Approve(int id) {
-        var release = releaseService.GetRelease(id);
+        var release = releaseService.GetRelease(id, User.IsInRole("Moderator"));
         releaseService.ApproveRelease(release);
         TempData["SuccessMessage"] = "Release approved successfully.";
         return RedirectToAction("Detail", new { id });
@@ -76,7 +76,7 @@ public class ReleaseController(
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Moderator")]
     public IActionResult Reject(int id) {
-        var release = releaseService.GetRelease(id);
+        var release = releaseService.GetRelease(id, User.IsInRole("Moderator"));
         releaseService.RejectRelease(release);
         TempData["SuccessMessage"] = "Release rejected successfully.";
         return RedirectToAction("Index");

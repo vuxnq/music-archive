@@ -20,11 +20,11 @@ public class GenreService(IDataConnector connector) : IGenreService {
         return GetGenres().Where(g => g.IsApproved).ToList();
     }
 
-    public Genre GetGenre(int id) {
+    public Genre GetGenre(int id, bool includeUnapproved = false) {
         var genre = _genreDao.GetGenre(id).ToDomain();
 
         genre.Releases = _releaseDao.GetReleases().ToDomain()
-            .Where(r => r.GenreId == id)
+            .Where(r => r.GenreId == id && (includeUnapproved || r.IsApproved))
             .ToList();
 
         return genre;

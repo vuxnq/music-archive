@@ -20,11 +20,11 @@ public class ArtistService(IDataConnector connector) : IArtistService {
         return GetArtists().Where(a => a.IsApproved).ToList();
     }
 
-    public Artist GetArtist(int id) {
+    public Artist GetArtist(int id, bool includeUnapproved = false) {
         var artist = _artistDao.GetArtist(id).ToDomain();
 
         artist.Releases = _releaseDao.GetReleases().ToDomain()
-            .Where(r => r.ArtistsId == id)
+            .Where(r => r.ArtistsId == id && (includeUnapproved || r.IsApproved))
             .ToList();
 
         return artist;

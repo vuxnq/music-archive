@@ -5,12 +5,30 @@
     Layout = "_Layout";
 }
 
-<h2>@ViewBag.Title</h2>
-@Html.ActionLink("Propose New Artist", "Add", "Artist")
-<ul>
+@* <h2>@ViewBag.Title</h2> *@
+@* @Html.ActionLink("Propose New Artist", "Add", "Artist") *@
+@* <ul> *@
+@*     @foreach (var artist in Model) { *@
+@*         <li> *@
+@*             @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null) *@
+@*         </li> *@
+@*     } *@
+@* </ul> *@
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Artists</h2>
+    @Html.ActionLink("Propose New Artist", "Add", "Artist", null, new { @class = "btn btn-sm btn-outline-secondary" })
+</div>
+
+<ul class="list-unstyled d-flex justify-content-center flex-wrap gap-4">
     @foreach (var artist in Model) {
-        <li>
-            @Html.ActionLink(artist.Name, "Detail", "Artist", new { id = artist.Id }, null)
+        <li class="text-center" style="width: 150px;">
+            <a href="@Url.Action("Detail", "Artist", new { id = artist.Id })" class="text-decoration-none text-dark">
+                <img src="https://dummyimage.com/150/000/ffffff?text=@(artist.Name)"
+                     class="rounded-circle mb-2 shadow-sm"
+                     alt="@artist.Name">
+                <div class="fw-bold">@artist.Name</div>
+            </a>
         </li>
     }
 </ul>

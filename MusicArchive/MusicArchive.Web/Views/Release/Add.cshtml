@@ -5,88 +5,260 @@
     Layout = "_Layout";
 }
 
-<h2>@ViewBag.Title</h2>
+@* <h2>@ViewBag.Title</h2> *@
+@* *@
+@* @using (Html.BeginForm("Add", "Release", FormMethod.Post)) { *@
+@*     @Html.AntiForgeryToken() *@
+@*     <div> *@
+@*         <label for="Title">Title</label> *@
+@*         <input type="text" id="Title" name="Title" value="@Model?.Title" required /> *@
+@*     </div> *@
+@*     <div> *@
+@*         <label for="Description">Description</label> *@
+@*         <input type="text" id="Description" name="Description" value="@Model?.Description" /> *@
+@*     </div> *@
+@*     <div> *@
+@*         <label for="ReleaseDate">Release date</label> *@
+@*         <input type="date" id="ReleaseDate" name="ReleaseDate" value="@(Model?.ReleaseDate.ToString("yyyy-MM-dd") ?? string.Empty)" required /> *@
+@*     </div> *@
+@*     <div> *@
+@*         <label for="ArtistId">Artist</label> *@
+@*         <select id="ArtistId" asp-for="ArtistId" asp-items="Model.ArtistOptions" required="required"> *@
+@*             <option value="" selected="selected" disabled="disabled">Select Artist</option> *@
+@*         </select> *@
+@*     </div> *@
+@*     <div> *@
+@*         <label for="GenreId">Genre</label> *@
+@*         <select id="GenreId" asp-for="GenreId" asp-items="Model.GenreOptions"> *@
+@*             <option value="" selected="selected">-</option> *@
+@*         </select> *@
+@*     </div> *@
+@* *@
+@*     <h3>Tracks</h3> *@
+@*     <table id="tracksTable"> *@
+@*         <thead> *@
+@*             <tr><th>Title</th><th>Duration (s)</th><th></th></tr> *@
+@*         </thead> *@
+@*         <tbody> *@
+@*             <tr> *@
+@*                 <td><input type="text" name="Tracks[0].Title" required /></td> *@
+@*                 <td><input type="number" name="Tracks[0].Duration" required /></td> *@
+@*                 <td><button type="button" class="remove">Remove</button></td> *@
+@*             </tr> *@
+@*         </tbody> *@
+@*     </table> *@
+@*     <p> *@
+@*         <button type="button" id="addTrack">Add Track</button> *@
+@*     </p> *@
+@*     <div> *@
+@*         <button type="submit">Submit</button> *@
+@*     </div> *@
+@* } *@
+@* *@
+@* <script> *@
+@* const addBtn = document.getElementById('addTrack'); *@
+@* const tbody = document.querySelector('#tracksTable tbody'); *@
+@* *@
+@* function reindexRows() { *@
+@*     const rows = tbody.querySelectorAll('tr'); *@
+@*     rows.forEach((row, i) => { *@
+@*         const title = row.querySelector('input[name$=".Title"]'); *@
+@*         const duration = row.querySelector('input[name$=".Duration"]'); *@
+@*         if (title) title.name = `Tracks[${i}].Title`; *@
+@*         if (duration) duration.name = `Tracks[${i}].Duration`; *@
+@*     }); *@
+@* } *@
+@* *@
+@* addBtn.addEventListener('click', () => { *@
+@*     const idx = tbody.querySelectorAll('tr').length; *@
+@*     const tr = document.createElement('tr'); *@
+@*     tr.innerHTML = '<td><input type="text" name="Tracks[' + idx + '].Title" required /></td>' + *@
+@*                     '<td><input type="number" name="Tracks[' + idx + '].Duration" required /></td>' + *@
+@*                     '<td><button type="button" class="remove">Remove</button></td>'; *@
+@*     tbody.appendChild(tr); *@
+@* }); *@
+@* *@
+@* tbody.addEventListener('click', (e) => { *@
+@*     const target = e.target; *@
+@*     if (target && target.classList && target.classList.contains('remove')) { *@
+@*         const tr = target.closest('tr'); *@
+@*         if (tr) tr.remove(); *@
+@*         reindexRows(); *@
+@*     } *@
+@* }); *@
+@* *@
+@* // if the page was rendered with prefilled rows, ensure names are sequential *@
+@* reindexRows(); *@
+@* </script> *@
 
-@using (Html.BeginForm("Add", "Release", FormMethod.Post)) {
-    @Html.AntiForgeryToken()
-    <div>
-        <label for="Title">Title</label>
-        <input type="text" id="Title" name="Title" value="@Model?.Title" required />
-    </div>
-    <div>
-        <label for="Description">Description</label>
-        <input type="text" id="Description" name="Description" value="@Model?.Description" />
-    </div>
-    <div>
-        <label for="ReleaseDate">Release date</label>
-        <input type="date" id="ReleaseDate" name="ReleaseDate" value="@(Model?.ReleaseDate.ToString("yyyy-MM-dd") ?? string.Empty)" required />
-    </div>
-    <div>
-        <label for="ArtistId">Artist</label>
-        <select id="ArtistId" asp-for="ArtistId" asp-items="Model.ArtistOptions" required="required">
-            <option value="" selected="selected" disabled="disabled">Select Artist</option>
-        </select>
-    </div>
-    <div>
-        <label for="GenreId">Genre</label>
-        <select id="GenreId" asp-for="GenreId" asp-items="Model.GenreOptions">
-            <option value="" selected="selected">-</option>
-        </select>
-    </div>
 
-    <h3>Tracks</h3>
-    <table id="tracksTable">
-        <thead>
-            <tr><th>Title</th><th>Duration (s)</th><th></th></tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" name="Tracks[0].Title" required /></td>
-                <td><input type="number" name="Tracks[0].Duration" required /></td>
-                <td><button type="button" class="remove">Remove</button></td>
-            </tr>
-        </tbody>
-    </table>
-    <p>
-        <button type="button" id="addTrack">Add Track</button>
-    </p>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
+<div class="container mt-4">
+
+    <h1 class="h3 fw-bold">New Release Proposal</h1>
+
+    <hr />
+
+    <form asp-action="Add" method="post" id="createReleaseForm">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="card shadow-sm border-0 bg-light mb-4">
+                    <div class="card-body p-4">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <label asp-for="Title" class="form-label fw-bold">Title</label>
+                                <input asp-for="Title" class="form-control form-control-lg" placeholder="Title..." />
+                                <span asp-validation-for="Title" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ArtistId" class="form-label fw-bold">Artist</label>
+                                <select asp-for="ArtistId" asp-items="Model.ArtistOptions" class="form-select">
+                                    <option value="" disabled="disabled">-- Select Artist --</option>
+                                </select>
+                                <span asp-validation-for="ArtistId" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="GenreId" class="form-label fw-bold">Genre</label>
+                                <select asp-for="GenreId" asp-items="Model.GenreOptions" class="form-select">
+                                    <option value="">-- Select Genre --</option>
+                                </select>
+                                <span asp-validation-for="GenreId" class="text-danger small"></span>
+                            </div>
+
+                             <div class="col-md-6">
+                                <label asp-for="ReleaseDate" class="form-label fw-bold">Release Date</label>
+                                <input asp-for="ReleaseDate" class="form-control" type="date" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 bg-light mb-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="text-secondary text-uppercase fs-6 fw-bold mb-0">Tracks</h5>
+                            <button type="button" id="addTrackBtn" class="btn btn-sm btn-outline-primary">
+                                + Add Track
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-borderless align-middle" id="tracksTable">
+                                <thead class="border-bottom">
+                                    <tr class="text-muted small text-uppercase">
+                                        <th style="width: 50px;">#</th>
+                                        <th>Title</th>
+                                        <th style="width: 120px;">Duration</th>
+                                        <th style="width: 50px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tracksContainer">
+                                    @for (int i = 0; i < Model.Tracks.Count; i++)
+                                    {
+                                        <tr class="track-row">
+                                            <td class="index-cell text-muted">@(i + 1)</td>
+                                            <td>
+                                                <input name="Tracks[@i].Title" value="@Model.Tracks[i].Title" class="form-control" placeholder="Track Title" />
+                                            </td>
+                                            <td>
+                                                <input name="Tracks[@i].Duration" value="@Model.Tracks[i].Duration" class="form-control text-center" placeholder="mm:ss" />
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-link text-danger p-0 remove-track">
+                                                    &times;
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                            <div id="emptyMessage" class="text-center text-muted py-3 @(Model.Tracks.Any() ? "d-none" : "")">
+                                <small>No tracks added yet.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <img src="https://dummyimage.com/300/000/ffffff?text=Cover Art" class="rounded shadow-sm w-100" alt="Preview">
+                <div class="my-3 p-3 rounded border bg-light">
+                    <label asp-for="Description" class="form-label fw-bold">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Description..."></textarea>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+                    <button type="submit" class="btn btn-dark px-5">Submit Release</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+
+            // Funkce pro aktualizaci indexů (aby poleTracks[0], Tracks[1] seděly)
+            function updateIndices() {
+                $('#tracksContainer tr').each(function (index, row) {
+                    $(row).find('.index-cell').text(index + 1);
+                    $(row).find('input[name$=".Title"]').attr('name', 'Tracks[' + index + '].Title');
+                    $(row).find('input[name$=".Duration"]').attr('name', 'Tracks[' + index + '].Duration');
+                });
+
+                // Update preview count
+                var count = $('#tracksContainer tr').length;
+
+                if (count === 0) {
+                    $('#emptyMessage').removeClass('d-none');
+                } else {
+                    $('#emptyMessage').addClass('d-none');
+                }
+            }
+
+            // Přidání nového řádku
+            $('#addTrackBtn').click(function () {
+                var newRow = `
+                    <tr class="track-row">
+                        <td class="index-cell text-muted"></td>
+                        <td>
+                            <input name="Tracks[0].Title" class="form-control" placeholder="Track Title" required />
+                        </td>
+                        <td>
+                            <input name="Tracks[0].Duration" class="form-control text-center" placeholder="Seconds" required/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-link text-danger p-0 remove-track" style="text-decoration: none; font-size: 1.5rem;">
+                                &times;
+                            </button>
+                        </td>
+                    </tr>`;
+
+                $('#tracksContainer').append(newRow);
+                updateIndices();
+            });
+
+            // Odstranění řádku (delegated event)
+            $('#tracksContainer').on('click', '.remove-track', function () {
+                $(this).closest('tr').remove();
+                updateIndices();
+            });
+
+            // Live Preview pro název alba
+            $('#Name').on('input', function() {
+                var val = $(this).val();
+                $('#previewTitle').text(val.length > 0 ? val : 'Album Title');
+            });
+
+            // Spustit při načtení (pro případ reloadu s daty)
+            updateIndices();
+        });
+    </script>
 }
-
-<script>
-const addBtn = document.getElementById('addTrack');
-const tbody = document.querySelector('#tracksTable tbody');
-
-function reindexRows() {
-    const rows = tbody.querySelectorAll('tr');
-    rows.forEach((row, i) => {
-        const title = row.querySelector('input[name$=".Title"]');
-        const duration = row.querySelector('input[name$=".Duration"]');
-        if (title) title.name = `Tracks[${i}].Title`;
-        if (duration) duration.name = `Tracks[${i}].Duration`;
-    });
-}
-
-addBtn.addEventListener('click', () => {
-    const idx = tbody.querySelectorAll('tr').length;
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td><input type="text" name="Tracks[' + idx + '].Title" required /></td>' +
-                    '<td><input type="number" name="Tracks[' + idx + '].Duration" required /></td>' +
-                    '<td><button type="button" class="remove">Remove</button></td>';
-    tbody.appendChild(tr);
-});
-
-tbody.addEventListener('click', (e) => {
-    const target = e.target;
-    if (target && target.classList && target.classList.contains('remove')) {
-        const tr = target.closest('tr');
-        if (tr) tr.remove();
-        reindexRows();
-    }
-});
-
-// if the page was rendered with prefilled rows, ensure names are sequential
-reindexRows();
-</script>

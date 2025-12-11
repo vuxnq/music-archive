@@ -5,46 +5,184 @@
     Layout = "_Layout";
 }
 
-<h2>@ViewBag.Title</h2>
+@* <h2>@ViewBag.Title</h2> *@
+@* *@
+@* <div> *@
+@*     <h3>details</h3> *@
+@*     <p>Id: @Model.Id</p> *@
+@*     <p>Name: @Model.Title</p> *@
+@*     <p>Description: @Model.Description</p> *@
+@*     <p>Release date: @(Model.ReleaseDate.ToString("d"))</p> *@
+@*     <p>Artist id: @Model.ArtistsId</p> *@
+@*     <p>Genre id: @Model.GenreId</p> *@
+@* </div> *@
+@* *@
+@* <h3>Artist</h3> *@
+@* @Html.ActionLink(Model.Artist.Name, "Detail", "Artist", new { id = Model.Artist.Id }, null) *@
+@* <p>@Model.Artist.BeginDate</p> *@
+@* *@
+@* @if (Model.Genre != null) { *@
+@*     <h3>Genre</h3> *@
+@*     @Html.ActionLink(Model.Genre.Name, "Detail", "Genre", new { id = Model.Genre.Id }, null) *@
+@* } *@
+@* *@
+@* <h3>Tracks</h3> *@
+@* <form asp-controller="Track" asp-action="Add" method="get"> *@
+@*     <input type="hidden" name="ReleaseId" value="@Model.Id" /> *@
+@*     <button type="submit" class="btn btn-primary">Add Track</button> *@
+@* </form> *@
+@* *@
+@* <ul> *@
+@*     @foreach (var track in Model.Tracks) { *@
+@*         <li> *@
+@*             @Html.ActionLink(track.Title, "Detail", "Track", new { id = track.Id }, null) *@
+@*         </li> *@
+@*     } *@
+@* </ul> *@
+@* *@
+@* @if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) { *@
+@*     <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline"> *@
+@*         <button type="submit" class="btn btn-success">Approve</button> *@
+@*     </form> *@
+@*     <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to reject this release?');"> *@
+@*         <button type="submit" class="btn btn-danger">Reject</button> *@
+@*     </form> *@
+@* } *@
 
-<div>
-    <h3>details</h3>
-    <p>Id: @Model.Id</p>
-    <p>Name: @Model.Title</p>
-    <p>Description: @Model.Description</p>
-    <p>Release date: @(Model.ReleaseDate.ToString("d"))</p>
-    <p>Artist id: @Model.ArtistsId</p>
-    <p>Genre id: @Model.GenreId</p>
+
+
+<div class="container mt-4">
+    <div class="row mb-5">
+        <div class="col-4 ">
+            <img src="https://dummyimage.com/400/000/ffffff?text=@(Model.Title)"
+                 class="img-fluid rounded shadow-sm w-100"
+                 alt="Cover Art"
+                 style="aspect-ratio: 1/1; object-fit: cover;">
+        </div>
+
+        <div class="col-8 d-flex flex-column">
+            <div class="p-3 bg-light rounded border mb-3 flex-grow-1">
+                <h5 class="text-uppercase text-muted fs-6 fw-bold">Description</h5>
+                <p class="mb-0">
+                    @(string.IsNullOrEmpty(Model.Description) ? "No description available for this release." : Model.Description)
+                </p>
+            </div>
+
+            <h1 class="display-4 fw-bold mb-1">@Model.Title</h1>
+
+            <div class="d-flex align-items-center">
+
+                <h3>
+                    <a href="@Url.Action("Detail", "Artist", new { id = Model.Artist.Id })" class="text-decoration-none text-secondary">
+                        @Model.Artist.Name
+                    </a>
+                </h3>
+
+                <div class="ps-3 d-flex gap-3 mb-1">
+                    <span class="border-start ps-3">
+                        @Model.ReleaseDate.ToString("d")
+                    </span>
+                    @if (Model.Genre != null) {
+                        <a href="@Url.Action("Detail", "Genre", new { id = Model.Genre.Id })" class="text-decoration-none badge text-light bg-secondary fs-6 fw-normal">
+                            @Model.Genre.Name
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <div class="row">
+        <div class="col-7">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3>Tracklist</h3>
+                @Html.ActionLink("+ Add Track", "Add", "Track", new { ReleaseId = Model.Id }, new { @class = "btn btn-sm btn-outline-primary" })
+            </div>
+
+            @if (Model.Tracks != null && Model.Tracks.Any()) {
+                <div class="table-responsive">
+                    <table class="table border">
+                        <thead>
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th>Title</th>
+                            <th class="text-end" style="width: 100px;">Duration</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{ int i = 1; }
+                        @foreach (var track in Model.Tracks) {
+                            <tr>
+                                <td class="text-muted">@(i++).</td>
+                                <td class="fw-bold">
+                                    <a href="@Url.Action("Detail", "Track", new { id = track.Id })" class="text-decoration-none @(!track.IsApproved ? "text-danger" : "text-dark")">
+                                        @track.Title
+                                    </a>
+                                </td>
+                                <td class="text-end text-muted font-monospace">3:45</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else {
+                <div class="alert alert-light border text-center py-4">
+                    <p class="text-muted mb-0">No tracks listed for this release.</p>
+                </div>
+            }
+        </div>
+
+        @if (Model.IsApproved) {
+            <div class="col-5">
+                <h3 class="">Comments</h3>
+
+                <div class="card mb-4  border-0">
+                    <div class="">
+                        <div class="form-group mb-2">
+                            <textarea class="form-control" rows="3" placeholder="Join the discussion..." disabled></textarea>
+                        </div>
+                        <button class="btn btn-primary disabled">Post Comment</button>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-3">
+                    <img src="https://dummyimage.com/50/000/ffffff?text=C" class="rounded-circle me-3" width="50" height="50">
+                    <div>
+                        <h6 class="fw-bold mb-1">Cameron Winter</h6>
+                        <p class="text-muted small mb-1">2 days ago</p>
+                        <p class="mb-0">God is real, God is real, I’m not kidding, God is actually real, I'm not kidding this time, I think God is actually for real, God is real, God is actually real, God is real, I wouldn’t joke about this, I'm not kidding this time</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-3">
+                    <img src="https://dummyimage.com/50/000/ffffff?text=h" class="rounded-circle me-3" width="50" height="50">
+                    <div>
+                        <h6 class="fw-bold mb-1">headache</h6>
+                        <p class="text-muted small mb-1">5 days ago</p>
+                        <p class="mb-0">All I've ever wanted was to move to the music. To be at a party that never ended. They used to chase me with hammers down the street. Boo-hoo, right? But I'm okay</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
-<h3>Artist</h3>
-@Html.ActionLink(Model.Artist.Name, "Detail", "Artist", new { id = Model.Artist.Id }, null)
-<p>@Model.Artist.BeginDate</p>
 
-@if (Model.Genre != null) {
-    <h3>Genre</h3>
-    @Html.ActionLink(Model.Genre.Name, "Detail", "Genre", new { id = Model.Genre.Id }, null)
-}
+@if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator"))
+{
+    <div class="position-fixed bottom-0 end-0 m-4" style="z-index: 1050;">
+        <div class="bg-white shadow-lg border rounded-pill py-2 px-3 d-flex align-items-center gap-2">
 
-<h3>Tracks</h3>
-<form asp-controller="Track" asp-action="Add" method="get">
-    <input type="hidden" name="ReleaseId" value="@Model.Id" />
-    <button type="submit" class="btn btn-primary">Add Track</button>
-</form>
+            <form asp-action="Reject" asp-route-id="@Model.Id" method="post" class="d-flex" onsubmit="return confirm('Are you sure?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 border-0"><h3 class="m-0">Reject</h3></button>
+            </form>
 
-<ul>
-    @foreach (var track in Model.Tracks) {
-        <li>
-            @Html.ActionLink(track.Title, "Detail", "Track", new { id = track.Id }, null)
-        </li>
-    }
-</ul>
-
-@if (!Model.IsApproved && User?.Identity?.IsAuthenticated == true && User.IsInRole("Moderator")) {
-    <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline">
-        <button type="submit" class="btn btn-success">Approve</button>
-    </form>
-    <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to reject this release?');">
-        <button type="submit" class="btn btn-danger">Reject</button>
-    </form>
+            <form asp-action="Approve" asp-route-id="@Model.Id" method="post" class="d-flex">
+                <button type="submit" class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm"><h3 class="m-0">Approve</h3></button>
+            </form>
+        </div>
+    </div>
 }

@@ -4,30 +4,92 @@
     ViewBag.Title = "Add Track";
     Layout = "_Layout";
 }
+@* *@
+@* <h2>@ViewBag.Title</h2> *@
+@* *@
+@* @using (Html.BeginForm("Add", "Track", FormMethod.Post)) { *@
+@*     @Html.AntiForgeryToken() *@
+@*     <div> *@
+@*         <label for="Title">Title</label> *@
+@*         <input type="text" id="Title" name="Title" value="@Model?.Title" required /> *@
+@*     </div> *@
+@*     <div> *@
+@*         <label for="Description">Description</label> *@
+@*         <input type="text" id="Description" name="Description" value="@Model?.Description" /> *@
+@*     </div> *@
+@*     <div> *@
+@*         <label for="Duration">Duration (seconds)</label> *@
+@*         <input type="number" id="Duration" name="Duration" value="@(Model?.Duration.ToString() ?? string.Empty)" required /> *@
+@*     </div> *@
+@*     <div> *@
+@*         <label for="ReleaseId">Release Id</label> *@
+@*         <select id="ReleaseId" asp-for="ReleaseId" asp-items="Model.ReleaseOptions" required="required"> *@
+@*             <option value="" selected="selected" disabled="disabled">Select Release</option> *@
+@*         </select> *@
+@*     </div> *@
+@*     <div> *@
+@*         <button type="submit">Submit</button> *@
+@*     </div> *@
+@* } *@
 
-<h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Add", "Track", FormMethod.Post)) {
-    @Html.AntiForgeryToken()
-    <div>
-        <label for="Title">Title</label>
-        <input type="text" id="Title" name="Title" value="@Model?.Title" required />
-    </div>
-    <div>
-        <label for="Description">Description</label>
-        <input type="text" id="Description" name="Description" value="@Model?.Description" />
-    </div>
-    <div>
-        <label for="Duration">Duration (seconds)</label>
-        <input type="number" id="Duration" name="Duration" value="@(Model?.Duration.ToString() ?? string.Empty)" required />
-    </div>
-    <div>
-        <label for="ReleaseId">Release Id</label>
-        <select id="ReleaseId" asp-for="ReleaseId" asp-items="Model.ReleaseOptions" required="required">
-            <option value="" selected="selected" disabled="disabled">Select Release</option>
-        </select>
-    </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
-}
+
+<div class="container mt-4">
+
+    <h1 class="h3 fw-bold">New Track Proposal</h1>
+
+    <hr />
+
+    <form asp-action="Add" method="post">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 bg-light mb-4">
+                    <div class="card-body p-4">
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Title" class="form-label fw-bold">Title</label>
+                                <input asp-for="Title" class="form-control form-control-lg" placeholder="Title..." autofocus />
+                                <span asp-validation-for="Title" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-6">
+                                <label asp-for="ReleaseId" class="form-label fw-bold">Release (Album)</label>
+                                <select asp-for="ReleaseId" asp-items="Model.ReleaseOptions" class="form-select">
+                                    <option value="" selected disabled>-- Select Album --</option>
+                                </select>
+                                <span asp-validation-for="ReleaseId" class="text-danger small"></span>
+                                <div class="form-text text-muted">The album this track belongs to.</div>
+                            </div>
+
+                            <div class="col-6">
+                                <label asp-for="Duration" class="form-label fw-bold">Duration (seconds)</label>
+                                <div class="input-group">
+                                    <input asp-for="Duration" type="number" min="1" class="form-control" placeholder="e.g. 245" />
+                                    <span class="input-group-text text-muted">sec</span>
+                                </div>
+                                <span asp-validation-for="Duration" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label fw-bold">Description (Optional)</label>
+                                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Specific notes about this track (lyrics excerpt, recording info)..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+                    <button type="submit" class="btn btn-dark px-5">Submit Track</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

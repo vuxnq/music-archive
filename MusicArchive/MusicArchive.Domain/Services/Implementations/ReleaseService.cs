@@ -22,7 +22,7 @@ public class ReleaseService(IDataConnector connector) : IReleaseService {
         return GetReleases().Where(r => r.IsApproved).ToList();
     }
 
-    public Release GetRelease(int id) {
+    public Release GetRelease(int id, bool includeUnapproved = false) {
         var release = _releaseDao.GetRelease(id).ToDomain();
 
         release.Artist = _artistDao.GetArtist(release.ArtistsId).ToDomain();
@@ -31,7 +31,9 @@ public class ReleaseService(IDataConnector connector) : IReleaseService {
             release.Genre = _genreDao.GetGenre(release.GenreId.Value).ToDomain();
         }
 
-        release.Tracks = _trackDao.GetTracks().Select(t => t.ToDomain()).Where(t => t.ReleaseId == release.Id).ToList();
+        release.Tracks = _trackDao.GetTracks().Select(t => t.ToDomain())
+            .Where(t => t.ReleaseId == release.Id && (includeUnapproved || t.IsApproved))
+            .ToList();
 
         return release;
     }

@@ -60,7 +60,8 @@ INSERT INTO genre (name, description, isApproved) VALUES
 ('Trip Hop', 'Downtempo electronic music', 1),
 ('Shoegaze', 'Atmospheric and effects-heavy rock', 1),
 ('Post-Hardcore', 'Aggressive and experimental hardcore punk', 1),
-('Ambient', 'Atmospheric and cinematic soundscapes', 1);
+('Ambient', 'Atmospheric and cinematic soundscapes', 1),
+('Hardcore', 'Aggressive punk rock genre', 0);
 
 INSERT INTO artist (name, description, beginDate, location, isApproved) VALUES
 ('Elliott Smith', 'Singer-songwriter known for intimate folk songs', '1991-01-01', 'USA', 1),
@@ -72,7 +73,9 @@ INSERT INTO artist (name, description, beginDate, location, isApproved) VALUES
 ('Aphex Twin', 'Pioneering electronic musician', '1991-01-01', 'UK', 1),
 ('Jeff Buckley', 'Singer-songwriter with a powerful vocal range', '1990-01-01', 'USA', 1),
 ('Portishead', 'Trip hop pioneers', '1991-01-01', 'UK', 1),
-('Tool', 'Progressive metal band', '1990-01-01', 'USA', 1);
+('Tool', 'Progressive metal band', '1990-01-01', 'USA', 1),
+('Converge', 'Influential metalcore and hardcore band', '1990-02-01', 'USA', 0);
+
 
 INSERT INTO "release" (title, description, releaseDate, artistId, genreId, isApproved) VALUES
 ('Either/Or', 'Acoustic and lo-fi folk album', '1997-02-25', 1, 2, 1),
@@ -112,7 +115,9 @@ INSERT INTO "release" (title, description, releaseDate, artistId, genreId, isApp
 
 ('Lateralus', 'Progressive metal masterpiece', '2001-05-15', 10, 3, 1),
 ('Aenima', 'Dark and complex progressive metal album', '1996-09-17', 10, 3, 1),
-('10,000 Days', 'Dense and spiritual progressive metal', '2006-05-02', 10, 3, 1);
+('10,000 Days', 'Dense and spiritual progressive metal', '2006-05-02', 10, 3, 1),
+
+('Jane Doe', 'Seminal metallic hardcore album', '2001-09-04', 11, 9, 0);
 
 
 INSERT INTO track (title, description, duration, releaseId, isApproved) VALUES
@@ -289,6 +294,20 @@ INSERT INTO track (title, description, duration, releaseId, isApproved) VALUES
 ('Vicarious', 'Explosive opening track', 430, (SELECT id FROM "release" WHERE title='10,000 Days'), 1),
 ('Jambi', 'Middle Eastern-inspired riffs', 445, (SELECT id FROM "release" WHERE title='10,000 Days'), 1),
 ('The Pot', 'Funky and heavy', 380, (SELECT id FROM "release" WHERE title='10,000 Days'), 1),
-('Right in Two', 'Philosophical and epic', 520, (SELECT id FROM "release" WHERE title='10,000 Days'), 1);
+('Right in Two', 'Philosophical and epic', 520, (SELECT id FROM "release" WHERE title='10,000 Days'), 1),
+
+-- Jane Doe
+('Concubine', 'Explosive and chaotic opener', 79, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Fault and Fracture', 'Complex rhythms and aggression', 185, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Distance and Meaning', 'Heavy and brooding track', 258, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Hell to Pay', 'Dark and sludge-influenced', 272, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Homewrecker', 'Anthemic hardcore song', 231, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('The Broken Vow', 'Fast-paced and intense', 133, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Bitter and Then Some', 'Relentless speed', 88, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Heaven in Her Arms', 'Emotional and melodic heavy track', 241, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Phoenix in Flight', 'Atmospheric and slow build', 229, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Phoenix in Flames', 'Short burst of noise', 42, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Thaw', 'Dissonant and heavy', 270, (SELECT id FROM "release" WHERE title='Jane Doe'), 0),
+('Jane Doe', 'Epic and emotional title track', 694, (SELECT id FROM "release" WHERE title='Jane Doe'), 0);
 
 COMMIT;

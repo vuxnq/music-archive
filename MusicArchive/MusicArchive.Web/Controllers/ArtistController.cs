@@ -16,7 +16,7 @@ public class ArtistController(
     }
 
     public IActionResult Detail(int id) {
-        var artist = artistService.GetArtist(id);
+        var artist = artistService.GetArtist(id, User.IsInRole("Moderator"));
         return View(artist);
     }
 
@@ -50,7 +50,7 @@ public class ArtistController(
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Moderator")]
     public IActionResult Approve(int id) {
-        var artist = artistService.GetArtist(id);
+        var artist = artistService.GetArtist(id, User.IsInRole("Moderator"));
         artistService.ApproveArtist(artist);
         TempData["SuccessMessage"] = "Artist approved successfully.";
         return RedirectToAction("Detail", new { id });
@@ -60,7 +60,7 @@ public class ArtistController(
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Moderator")]
     public IActionResult Reject(int id) {
-        var artist = artistService.GetArtist(id);
+        var artist = artistService.GetArtist(id, User.IsInRole("Moderator"));
         artistService.RejectArtist(artist);
         TempData["SuccessMessage"] = "Artist rejected successfully.";
         return RedirectToAction("Index");
